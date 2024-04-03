@@ -21,4 +21,11 @@ public class Park {
         addIntersection(b);
         addAlley(alley);
     }
+    public void createMatrix(){
+        double [][] matrix = new double[intersections.size()][alleys.size()];
+        for (Alley alley : alleys) {
+        }
+    }
+
+
 }
