@@ -37,6 +37,22 @@ public class Main {
 
     }
 
+    public static void testCase(){
+        Park park = new Park();
+
+        park.addAlley(1 ,2 ,4);
+        park.addAlley(2 ,3, 4);
+        park.addAlley(3, 4 ,4);
+        park.addAlley(1 ,3, 6);
+        park.addAlley(1, 4 ,4);
+
+        ArrayList<Integer> osk = new ArrayList<>();
+        osk.add(1);
+
+        ArrayList<Integer> exits = new ArrayList<>();
+        exits.add(4);
+        park.createProbabilityMatrix(4, osk, exits);
+    }
 
 
 }
