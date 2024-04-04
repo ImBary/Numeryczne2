@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -14,15 +15,32 @@ public class Main {
             int length = sc.nextInt();
             park.addAlley(a, b, length);
         }
-        System.out.println("Napisz ile jest OSK oraz gdzie sie znajduja(zmien te linie w kodzie gdy dodasz wiecej osk)");
+        System.out.println("Napisz ile jest OSK oraz gdzie sie znajduja");
         int oskCount = sc.nextInt();
-        int osk = sc.nextInt();
+        ArrayList<Integer> osk = new ArrayList<>();
+        for (int i = 0; i < oskCount; i++) {
+            osk.add(sc.nextInt());
+        }
         System.out.println("Napisz ile jest wyjsc oraz gdzie sie znajduja");
         int exitCount = sc.nextInt();
-        int exit = sc.nextInt();
-        System.out.println("Napisz ile jest wedrowcow oraz gdzie startuja");
-        int wandererCount = sc.nextInt();
+        ArrayList<Integer> exits = new ArrayList<>();
+        for (int i = 0; i < exitCount; i++) {
+            exits.add(sc.nextInt());
+        }
+        System.out.println("Napisz gdzie startuje wędrowiec");
         int wanderer = sc.nextInt();
+        park.createProbabilityMatrix(n, osk, exits);
     }
 
 }
+/*
+ 4 5
+ 1 2 4
+ 2 3 4
+ 3 4 4
+ 1 3 6
+ 1 4 4
+ 1 1
+ 1 4
+ 3
+* */

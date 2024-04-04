@@ -19,34 +19,48 @@ public class Park {
         addAlley(alley);
     }
 
-    public void createMatrix(int n){
-        int[][] lengths = new int[n][n ];
-        for (int i = 0; i < n; i++) {
-            lengths[i][i] = 1;
-        }
-        /*for (Alley alley : alleys) {
-            lengths[alley.getA().getId()][alley.getB().getId()] = alley.getLength();
-            lengths[alley.getB().getId()][alley.getB().getId()] = alley.getLength();
-        }*/
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.print(lengths[i][j]);
+    private int[][] createLengthsMatrix(int n, ArrayList<Integer> osk, ArrayList<Integer> exits){
+        int[][] lengths = new int[n + 1][n + 1];
+        for (Alley alley : alleys) {
+            if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
+                lengths[alley.getA().getId()][alley.getB().getId()] = alley.getLength();
             }
-            System.out.println();
+            if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
+                lengths[alley.getB().getId()][alley.getA().getId()] = alley.getLength();
+            }
+        }
+        return lengths;
+    }
+
+    public void createProbabilityMatrix(int n, ArrayList<Integer> osk, ArrayList<Integer> exits) {
+        int [][] lengths = createLengthsMatrix(n, osk, exits);
+        double [][] probabilities = new double[n + 1][n + 1];
+        for (int i = 1; i <= 4; i++) {
+            int totalDistance = 0;
+            for (int j = 1; j <= 4; j++) {
+                totalDistance += lengths[i][j];
+            }
+            for (int j = 1; j <= 4; j++) {
+                if (lengths[i][j] == 0) {
+                    if (i == j) {
+                        probabilities[i][j] = 1.0;
+                    }
+                    continue;
+                }
+                probabilities[i][j] = (double) (totalDistance - lengths[i][j]) / (double) totalDistance;
+            }
+        }
+        double[] rightSide = new double[n + 1];
+        for (Integer exit : exits) {
+            rightSide[exit] = 1.0;
+        }
+        System.out.println("Macierz prawdodopodibeństwa");
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                System.out.print("[" + probabilities[i][j] + "]");
+            }
+            System.out.println(" = [" + rightSide[i] + "]");
         }
     }
-/*
- 4 5
- 1 2 4
- 2 3 4
- 3 4 4
- 1 3 6
- 1 4 4
- 1 1
- 1 4
- 1 3
- 0
-* */
-
 
 }
