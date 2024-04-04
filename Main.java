@@ -30,6 +30,10 @@ public class Main {
         System.out.println("Napisz gdzie startuje wędrowiec");
         int wanderer = sc.nextInt();
         park.createProbabilityMatrix(n, osk, exits);
+
+
+        Monte monte = new Monte();
+        System.out.println(monte.monte(10000, 3));
     }
 
 }
