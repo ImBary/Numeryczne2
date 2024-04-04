@@ -33,40 +33,33 @@ public class Park {
     }
 
     public void createProbabilityMatrix(int n, ArrayList<Integer> osk, ArrayList<Integer> exits) {
-        int [][] lengths = createLengthsMatrix(n, osk, exits);
-        double [][] probabilities = new double[n + 1][n + 1];
-        for (int i = 1; i <= 4; i++) {
+        int[][] lengths = createLengthsMatrix(n, osk, exits);
+        double[][] probabilities = new double[n + 1][n + 1];
+
+        for (int i = 1; i <= n; i++) {
             int totalDistance = 0;
-            double totalProbability = 0.0;
-            for (int j = 1; j <= 4; j++) {
+            for (int j = 1; j <= n; j++) {
                 totalDistance += lengths[i][j];
             }
-            for (int j = 1; j <= 4; j++) {
+
+            for (int j = 1; j <= n; j++) {
                 if (lengths[i][j] == 0) {
                     if (i == j) {
                         probabilities[i][j] = 1.0;
                     }
                     continue;
-                }
-                probabilities[i][j] = (double) (totalDistance - lengths[i][j]) / (double) totalDistance;
-                totalProbability += probabilities[i][j];
-            }
-            if (totalProbability > 1.0) {
-                double scale = 1 / totalProbability;
-                System.out.println(scale);
-                for (int j = 1; j <= n; j++) {
-                    if (i == j) {
-                        continue;
-                    }
-                    probabilities[i][j] *= scale;
+                } else {
+                    probabilities[i][j] = (double) lengths[i][j] / (double) totalDistance;
                 }
             }
         }
+
         double[] rightSide = new double[n + 1];
         for (Integer exit : exits) {
             rightSide[exit] = 1.0;
         }
-        System.out.println("Macierz prawdodopodibeństwa");
+
+        System.out.println("Macierz prawdopodobieństwa");
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
                 System.out.print("[" + probabilities[i][j] + "]");
@@ -74,5 +67,5 @@ public class Park {
             System.out.println(" = [" + rightSide[i] + "]");
         }
     }
-
 }
+
