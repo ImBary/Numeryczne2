@@ -1,6 +1,7 @@
+
 public class Intersection {
     private int id;
-
+    
     public Intersection(int id) {
         this.id = id;
     }
@@ -8,4 +9,7 @@ public class Intersection {
     public int getId() {
         return id;
     }
+
+   
+
 }

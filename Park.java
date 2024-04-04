@@ -66,6 +66,78 @@ public class Park {
             }
             System.out.println(" = [" + rightSide[i] + "]");
         }
+
+
+
+        System.out.println("gaus:");
+
+        double[][] matrixForGaus = new double[n + 1][n + 2];      
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                matrixForGaus[i][j] = probabilities[i][j];
+            }
+        }        
+        for (int i = 1; i <= n; i++) {
+            matrixForGaus[i][n + 1] = rightSide[i];
+        }
+        
+        System.out.println("Połączona macierz probabilities i rightSide:");
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n + 1; j++) {
+                System.out.print("[" + matrixForGaus[i][j] + "]");
+            }
+            System.out.println();
+        }
+        solveGaus(matrixForGaus);
+    }
+
+    private void solveGaus(double[][] matrix) {
+        int n = matrix.length;
+    
+        for (int i = 0; i < n; i++) {
+            // maax w kolumnie
+            double maxElement = Math.abs(matrix[i][i]);
+            int maxRow = i;
+            for (int j = i + 1; j < n; j++) {
+                if (Math.abs(matrix[j][i]) > maxElement) {
+                    maxElement = Math.abs(matrix[j][i]);
+                    maxRow = j;
+                }
+            }
+            //zamieniamy wiersze
+            double[] tmpRow = matrix[maxRow];
+            matrix[maxRow] = matrix[i];
+            matrix[i] = tmpRow;
+    
+            // sprawdzamy zeby nie dzielic przez zero 
+            if (Math.abs(matrix[i][i]) <= 1e-10) {
+                matrix[i][i] = 1e-10;
+            }
+    
+            
+            for (int j = i + 1; j < n; j++) {
+                double factor = matrix[j][i] / matrix[i][i];
+                for (int k = i; k <= n; k++) {
+                    matrix[j][k] -= factor * matrix[i][k];
+                }
+            }
+        }
+    
+        
+        double[] x = new double[n];
+        for (int i = n - 1; i >= 0; i--) {
+            x[i] = matrix[i][n];
+            for (int j = i + 1; j < n; j++) {
+                x[i] -= matrix[i][j] * x[j];
+            }
+            x[i] /= matrix[i][i];
+        }
+    
+        
+        System.out.println("Wyniki:");
+        for (int i = 1; i < n; i++) {
+            System.out.println("x" + (i ) + " : " + Math.abs(x[i]));
+        }
     }
 }
 
