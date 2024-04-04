@@ -47,7 +47,6 @@ public class Park {
                     if (i == j) {
                         probabilities[i][j] = 1.0;
                     }
-                    continue;
                 } else {
                     probabilities[i][j] = (double) lengths[i][j] / (double) totalDistance;
                 }
@@ -59,17 +58,7 @@ public class Park {
             rightSide[exit] = 1.0;
         }
 
-        System.out.println("Macierz prawdopodobieństwa");
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                System.out.print("[" + probabilities[i][j] + "]");
-            }
-            System.out.println(" = [" + rightSide[i] + "]");
-        }
-
-
-
-        System.out.println("gaus:");
+        System.out.println("Gaus:");
 
         double[][] matrixForGaus = new double[n + 1][n + 2];      
         for (int i = 1; i <= n; i++) {
@@ -81,7 +70,7 @@ public class Park {
             matrixForGaus[i][n + 1] = rightSide[i];
         }
         
-        System.out.println("Połączona macierz probabilities i rightSide:");
+        System.out.println("Macierz prawdopodobieństwa:");
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n + 1; j++) {
                 System.out.print("[" + matrixForGaus[i][j] + "]");
@@ -139,5 +128,62 @@ public class Park {
             System.out.println("x" + (i ) + " : " + Math.abs(x[i]));
         }
     }
+
+
+
+    //MONTE
+    public double monte(int N, int wanderer, ArrayList<Integer> exits, ArrayList<Integer> osk){
+        double prob=0.0;
+        for(int i = 0; i < N; i++) {
+            if (singleTest(wanderer, exits, osk)) {
+                prob++;
+            }
+        }
+        return prob/N;
+    }
+
+
+    public Boolean singleTest(int start, ArrayList<Integer> exits, ArrayList<Integer> osk) {
+        Random rand = new Random();
+        Position wanderer = new Position(start, 0);
+        while (!osk.contains(wanderer.getIntersection()) && !exits.contains(wanderer.getIntersection())) {
+            if (wanderer.alley == null) {
+                List<Alley> possibleAlleys = new ArrayList<>();
+                for (Alley alley : alleys) {
+                    if (alley.getA().getId() == wanderer.getIntersection() || alley.getB().getId() == wanderer.getIntersection()) {
+                        possibleAlleys.add(alley);
+                    }
+                }
+                wanderer.alley = possibleAlleys.get(rand.nextInt(possibleAlleys.size()));
+                wanderer.distance++;
+            } else {
+                int step = rand.nextInt(2);
+                if (step == 0) {
+                    wanderer.distance--;
+                } else {
+                    wanderer.distance++;
+                }
+                if (wanderer.distance == 0) {
+                    wanderer.alley = null;
+                } else if ( wanderer.distance == wanderer.alley.getLength()) {
+                    if (wanderer.alley.getA().getId() != wanderer.intersection) {
+                        wanderer.intersection = wanderer.alley.getA().getId();
+                    } else {
+                        wanderer.intersection = wanderer.alley.getB().getId();
+                    }
+                }
+            }
+        }
+        if (osk.contains(wanderer.getIntersection())){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+
+
+
 }
 
