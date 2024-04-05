@@ -74,7 +74,7 @@ public class Park {
             System.out.println(" = [" + rightSide[i] + "]");
         }
 
-        System.out.println("gaus:");
+        
 
         double[][] matrixForGaus = new double[n + 1][n + 2];
         for (int i = 1; i <= n; i++) {
@@ -93,16 +93,28 @@ public class Park {
             }
             System.out.println();
         }
-        solveGaus(matrixForGaus);
+        System.out.println("Gauss without choice:");
+        printGauss(solveGaus(matrixForGaus));
+
+        System.out.println("Gaus with partial choice:");
+        printGauss(solveGausWithChoice(matrixForGaus));
 
 
         System.out.println("Gauss-Seidel Iteration:");
         double[] initialGuess = new double[n + 1];
         Arrays.fill(initialGuess, 0.0);
         double[] solution = gaussSeidel(probabilities, rightSide, initialGuess, 0.0001, 1000);
+        printGauss(solution);
     }
 
-    private void solveGaus(double[][] matrix) {
+    private void printGauss(double[] matrix){
+        int n = matrix.length;
+        for(int i =1; i<n; i++){
+            System.out.println("x"+(i)+" : "+matrix[i]);
+        }
+    }
+
+    private double[] solveGausWithChoice(double[][] matrix) {
         int n = matrix.length;
     
         for (int i = 0; i < n; i++) {
@@ -141,10 +153,7 @@ public class Park {
             x[i] /= matrix[i][i];
         }
 
-        System.out.println("Wyniki:");
-        for (int i = 1; i < n; i++) {
-            System.out.println("x" + (i ) + " : " + Math.abs(x[i]));
-        }
+        return x;
     }
 
     private double[] gaussSeidel(double[][] coefficients, double[] rightSide, double[] initialGuess, double tolerance, int maxIterations) {
@@ -182,8 +191,31 @@ public class Park {
         return maxError;
     }
 
+    private double[] solveGaus(double[][] matrix){
+        int n = matrix.length;
+        for(int i=0; i<n; i++){
+            if(matrix[i][i]<=1e-10){
+                matrix[i][i] = 1e-10;
+            }
+            for(int j =i+1; j<n; j++){
+                double factor = matrix[j][i] / matrix[i][i];
+                for(int k = i; k<=n; k++){
+                    matrix[j][k] -= factor * matrix[i][k];
+                }
+            }
+        }
+        double[] x = new double[n];
+        for (int i = n - 1; i >= 0; i--) {
+            x[i] = matrix[i][n];
+            for (int j = i + 1; j < n; j++) {
+                x[i] -= matrix[i][j] * x[j];
+            }
+            x[i] /= matrix[i][i];
+        }
 
+        return x;
 
+    }
     //MONTE
     public double monte(int N, int wanderer, ArrayList<Integer> exits, ArrayList<Integer> osk){
         double prob=0.0;

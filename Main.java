@@ -33,7 +33,7 @@ public class Main {
 
 
 
-         System.out.println(park.monte(10000, wanderer, exits, osk));
+         System.out.println("Monte carlo:"+park.monte(10000, wanderer, exits, osk));
 
     }
 
