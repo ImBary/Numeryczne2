@@ -110,7 +110,7 @@ public class Park {
     private void printGauss(double[] matrix){
         int n = matrix.length;
         for(int i =1; i<n; i++){
-            System.out.println("x"+(i)+" : "+matrix[i]);
+            System.out.println("x"+(i)+" : "+Math.abs(matrix[i]));
         }
     }
 
