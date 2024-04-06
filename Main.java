@@ -29,6 +29,7 @@ public class Main {
         }
         System.out.println("Napisz gdzie startuje wędrowiec");
         int wanderer = sc.nextInt();
+        park.saveToTxt();
         park.createProbabilityMatrix(n, osk, exits);
 
 

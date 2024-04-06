@@ -1,4 +1,7 @@
 import java.util.*;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 /*
     TODO:
         1. DZIAŁA Napraw createProbabilityMatrix chyba zwraca ciągle złe wyniki bo najdłuzsza ma najwieksze prawdopodobienstwo
@@ -263,6 +266,18 @@ public class Park {
             return false;
         } else {
             return true;
+        }
+    }
+
+    //CSV
+
+    public void saveToTxt() {
+        try (FileWriter writer = new FileWriter("park.txt")) {
+            for (Alley alley : alleys) {
+                writer.write(alley.getA().getId() + " " + alley.getB().getId() + " " + alley.getLength() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
