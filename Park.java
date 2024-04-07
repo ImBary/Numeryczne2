@@ -293,7 +293,7 @@ public class Park extends Times {
 
     }
     //MONTE
-    public double monte(int N, int wanderer, ArrayList<Integer> exits, ArrayList<Integer> osk){
+    public double monte(int N, int wanderer){
         double prob=0.0;
         for(int i = 0; i < N; i++) {
             if (singleTest(wanderer, exits, osk)) {
