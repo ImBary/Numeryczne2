@@ -2,15 +2,25 @@ import java.util.*;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
+import java.util.function.Function;
 /*
     TODO:
         1. DZIAŁA Napraw createProbabilityMatrix chyba zwraca ciągle złe wyniki bo najdłuzsza ma najwieksze prawdopodobienstwo
         2. Wyswietlanie wyników gaussnaider
  */
-public class Park {
+public class Park extends Times {
     private Map<Integer, Intersection> intersections = new HashMap<>();
     private List<Alley> alleys = new ArrayList<>();
-
+    
+    private int n;
+    private ArrayList<Integer> osk;
+    private ArrayList<Integer> exits;
+    public void valPark(int n, ArrayList<Integer> osk, ArrayList<Integer> exits){
+        this.n = n;
+        this.osk = osk;
+        this.exits = exits;
+    }
+    public Park(){}
 
     public void addIntersection(Intersection intersection) {
         intersections.put(intersection.getId(), intersection);
@@ -40,7 +50,8 @@ public class Park {
         return lengths;
     }
 
-    public void createProbabilityMatrix(int n, ArrayList<Integer> osk, ArrayList<Integer> exits) {
+    public double[][] createProbabilityMatrix() {
+       
         int[][] lengths = createLengthsMatrix(n, osk, exits);
         double[][] probabilities = new double[n + 1][n + 1];
 
@@ -69,13 +80,13 @@ public class Park {
         }
 
 
-        System.out.println("Macierz prawdopodobieństwa");
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                System.out.print("[" + probabilities[i][j] + "]");
-            }
-            System.out.println(" = [" + rightSide[i] + "]");
-        }
+        // System.out.println("Macierz prawdopodobieństwa");
+        // for (int i = 1; i <= n; i++) {
+        //     for (int j = 1; j <= n; j++) {
+        //         System.out.print("[" + probabilities[i][j] + "]");
+        //     }
+        //     System.out.println(" = [" + rightSide[i] + "]");
+        // }
 
         
 
@@ -89,32 +100,93 @@ public class Park {
             matrixForGaus[i][n + 1] = rightSide[i];
         }
 
-        System.out.println("Połączona macierz probabilities i rightSide:");
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n + 1; j++) {
-                System.out.print("[" + matrixForGaus[i][j] + "]");
-            }
-            System.out.println();
-        }
-        System.out.println("Gauss without choice:");
-        printGauss(solveGaus(matrixForGaus));
+        // System.out.println("Połączona macierz probabilities i rightSide:");
+        // for (int i = 1; i <= n; i++) {
+        //     for (int j = 1; j <= n + 1; j++) {
+        //         System.out.print("[" + matrixForGaus[i][j] + "]");
+        //     }
+        //     System.out.println();
+        // }
+        // System.out.println("Gauss without choice:");
+        // printGauss(solveGaus(matrixForGaus));
 
-        System.out.println("Gaus with partial choice:");
-        printGauss(solveGausWithChoice(matrixForGaus));
+        // System.out.println("Gaus with partial choice:");
+        // printGauss(solveGausWithChoice(matrixForGaus));
 
 
-        System.out.println("Gauss-Seidel Iteration:");
-        double[] initialGuess = new double[n + 1];
-        Arrays.fill(initialGuess, 0.0);
-        double[] solution = gaussSeidel(probabilities, rightSide, initialGuess, 0.0001, 1000);
-        printGauss(solution);
+        // System.out.println("Gauss-Seidel Iteration:");
+        // double[] initialGuess = new double[n + 1];
+        // Arrays.fill(initialGuess, 0.0);
+        // double[] solution = gaussSeidel(probabilities, rightSide, initialGuess, 0.0001, 1000);
+        // printGauss(solution);
+        return matrixForGaus;
     }
+    public void getGaus(){
+        getGaus();
+    }
+    public void getGaus(double[] matrix){
 
-    private void printGauss(double[] matrix){
-        int n = matrix.length;
+    }
+    public void printGaussWithoutChoice(double[][] matrix){
+        
+        double[] wmatrix = solveGausWithChoice(createProbabilityMatrix());
+        int n = wmatrix.length;
         for(int i =1; i<n; i++){
-            System.out.println("x"+(i)+" : "+Math.abs(matrix[i]));
+            System.out.println("x"+(i)+" : "+Math.abs(wmatrix[i]));
         }
+        
+    }
+    public void printGauss(double[][] matrix){
+        
+        double[] wmatrix = solveGaus(createProbabilityMatrix());
+        int n = wmatrix.length;
+        for(int i =1; i<n; i++){
+            System.out.println("x"+(i)+" : "+Math.abs(wmatrix[i]));
+        }
+        
+    }
+    public void printGaussSiedel(double[][] matrix) {
+        double[] wmatrix = getGaussSeidel(matrix);
+        int n = wmatrix.length;
+        for (int i = 0; i < n-1; i++) {
+            System.out.println("x" + (i + 1) + " : " + Math.abs(wmatrix[i]));
+        }
+    }
+    private double[] getGaussSeidel(double[][] matrix){
+        double[] res = null;
+        double[][] prob = null;
+        double[] rs = null;
+        Map<double[][],double[]> separetedMatrix = sepMatrix(matrix);
+        for( Map.Entry<double[][], double[]> entry : separetedMatrix.entrySet()){
+            prob = entry.getKey();
+            rs = entry.getValue();
+        }
+        double[] initialGuess = new double[matrix.length];
+        Arrays.fill(initialGuess, 0.0);
+        // //debug
+        // System.out.println("Probabilities:");
+        // for (double[] row : prob) {
+        //     for (double value : row) {
+        //         System.out.print(value + " ");
+        //     }
+        //     System.out.println();
+        // }
+        // //debug
+        // System.out.println("Right-side Vector:");
+        // for (double value : rs) {
+        //     System.out.println(value + " ");
+        // }
+        
+        final double[][] fprob = prob;
+        final double[] frs = rs;
+        
+        res = gaussSeidel(fprob,frs,initialGuess,0.0001, 1000);
+        // System.out.println(res.length);
+        // //debug
+        // for(int i=0; i<res.length-1; i++){
+        //     System.out.println(res[i]);
+        // }
+        return res;
     }
 
     private double[] solveGausWithChoice(double[][] matrix) {
@@ -162,7 +234,7 @@ public class Park {
     private double[] gaussSeidel(double[][] coefficients, double[] rightSide, double[] initialGuess, double tolerance, int maxIterations) {
         int n = coefficients.length - 1;
         double[] currentSolution = initialGuess.clone();
-        double[] nextSolution = new double[n + 1];
+        double[] nextSolution = new double[initialGuess.length];
 
         int iterations = 0;
         double error = tolerance + 1;
@@ -177,7 +249,8 @@ public class Park {
                 }
                 nextSolution[i] = (rightSide[i] - sum) / coefficients[i][i];
             }
-
+            // System.out.println("current sol len: "+currentSolution.length);
+            // System.out.println("next len: "+nextSolution.length);
             error = maxError(currentSolution, nextSolution);
             currentSolution = nextSolution.clone();
             iterations++;
@@ -280,6 +353,72 @@ public class Park {
             e.printStackTrace();
         }
     }
+
+    public void getExecTime(){
+        double[][] matrix = createProbabilityMatrix();
+        countExecTime(matrix);
+    }
+
+    private void countExecTime(double[][] matrix){
+        
+        double executionTime;
+        Function<Void,Void> solveGausFunction = (Void) ->{
+            solveGaus(matrix);
+            return null;
+        };
+        executionTime = countTime(solveGausFunction);
+        System.out.println("gauss without choice exec time: "+ executionTime);
+
+        Function<Void,Void> solveGaussWithChoiceFunction = (Void) ->{
+            solveGausWithChoice(matrix);
+            return null;
+        };
+        executionTime = countTime(solveGaussWithChoiceFunction);
+        System.out.println("gauss with choice exec time: "+ executionTime);
+
+        
+        double[][] prob = null;
+        double[] rs = null;
+        Map<double[][],double[]> separetedMatrix = sepMatrix(matrix);
+        for( Map.Entry<double[][], double[]> entry : separetedMatrix.entrySet()){
+            prob = entry.getKey();
+            rs = entry.getValue();
+        }
+        double[] initialGuess = new double[matrix.length];
+        Arrays.fill(initialGuess, 0.0);
+        final double[][] fprob = prob;
+        final double[] frs = rs;
+        Function<Void,Void> solveGausSiedelFunction = (Void) ->{
+            gaussSeidel(fprob,frs,initialGuess,0.0001, 1000);
+            return null;
+        };
+
+        executionTime = countTime(solveGausSiedelFunction);
+        System.out.println("gauss seidel exec time: "+ executionTime);
+    }
+
+    private Map<double[][], double[]> sepMatrix(double[][] matrix) {
+        Map<double[][], double[]> res = new HashMap<>();
+        
+        int len = matrix.length - 1;
+        double[][] prob = new double[len][len];
+        double[] rightSide = new double[len];
+        
+        for (int i = 1; i <= len; i++) {
+            for (int j = 1; j <= len + 1; j++) { 
+                if (j == len + 1) {
+                    rightSide[i - 1] = matrix[i][j]; 
+                } else {
+                    prob[i - 1][j - 1] = matrix[i][j]; 
+                }
+            }
+        }
+        
+        res.put(prob, rightSide);
+        
+        return res;
+    }
+    
 
 }
 
