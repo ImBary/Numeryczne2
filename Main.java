@@ -33,10 +33,12 @@ public class Main {
         park.valPark(n, osk, exits);
 
         double[][] matrix = park.createProbabilityMatrix();
-
-       // park.printGauss(matrix);
+        System.out.println("Gaaus");
+        park.printGauss(matrix);
+        System.out.println("Gaus sidel");
         park.printGaussSiedel(matrix);
-        //park.printGaussWithoutChoice(matrix);
+        System.out.println("gaus choice");
+        park.printGaussWithoutChoice(matrix);
 
         park.getExecTime();
 

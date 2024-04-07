@@ -145,14 +145,12 @@ public class Park extends Times {
         }
         
     }
-    public void printGaussSiedel(double[][] matrix){
-        
+    public void printGaussSiedel(double[][] matrix) {
         double[] wmatrix = getGaussSeidel(matrix);
         int n = wmatrix.length;
-        for(int i =1; i<n; i++){
-            System.out.println("x"+(i)+" : "+Math.abs(wmatrix[i]));
+        for (int i = 0; i < n-1; i++) {
+            System.out.println("x" + (i + 1) + " : " + Math.abs(wmatrix[i]));
         }
-        
     }
     private double[] getGaussSeidel(double[][] matrix){
         double[] res = null;
@@ -165,28 +163,29 @@ public class Park extends Times {
         }
         double[] initialGuess = new double[matrix.length];
         Arrays.fill(initialGuess, 0.0);
-        //debug
-        System.out.println("Probabilities:");
-        for (double[] row : prob) {
-            for (double value : row) {
-                System.out.print(value + " ");
-            }
-            System.out.println();
-        }
-        //debug
-        System.out.println("Right-side Vector:");
-        for (double value : rs) {
-            System.out.print(value + " ");
-        }
+        // //debug
+        // System.out.println("Probabilities:");
+        // for (double[] row : prob) {
+        //     for (double value : row) {
+        //         System.out.print(value + " ");
+        //     }
+        //     System.out.println();
+        // }
+        // //debug
+        // System.out.println("Right-side Vector:");
+        // for (double value : rs) {
+        //     System.out.println(value + " ");
+        // }
         
         final double[][] fprob = prob;
         final double[] frs = rs;
-        res = gaussSeidel(fprob,frs,initialGuess,0.0001, 1000);
         
-        //debug
-        for(int i=0; i<res.length; i++){
-            System.out.println(res[i]);
-        }
+        res = gaussSeidel(fprob,frs,initialGuess,0.0001, 1000);
+        // System.out.println(res.length);
+        // //debug
+        // for(int i=0; i<res.length-1; i++){
+        //     System.out.println(res[i]);
+        // }
         return res;
     }
 
@@ -235,7 +234,7 @@ public class Park extends Times {
     private double[] gaussSeidel(double[][] coefficients, double[] rightSide, double[] initialGuess, double tolerance, int maxIterations) {
         int n = coefficients.length - 1;
         double[] currentSolution = initialGuess.clone();
-        double[] nextSolution = new double[n + 1];
+        double[] nextSolution = new double[initialGuess.length];
 
         int iterations = 0;
         double error = tolerance + 1;
@@ -250,7 +249,8 @@ public class Park extends Times {
                 }
                 nextSolution[i] = (rightSide[i] - sum) / coefficients[i][i];
             }
-
+            // System.out.println("current sol len: "+currentSolution.length);
+            // System.out.println("next len: "+nextSolution.length);
             error = maxError(currentSolution, nextSolution);
             currentSolution = nextSolution.clone();
             iterations++;
@@ -376,7 +376,7 @@ public class Park extends Times {
         executionTime = countTime(solveGaussWithChoiceFunction);
         System.out.println("gauss with choice exec time: "+ executionTime);
 
-        //prawdopodobnie zle bo cos sie buguje z seidel nw co 
+        
         double[][] prob = null;
         double[] rs = null;
         Map<double[][],double[]> separetedMatrix = sepMatrix(matrix);
@@ -397,26 +397,25 @@ public class Park extends Times {
         System.out.println("gauss seidel exec time: "+ executionTime);
     }
 
-    private Map<double[][],double[]> sepMatrix(double[][] matrix){
-        Map<double[][],double[]> res = new HashMap<>();
+    private Map<double[][], double[]> sepMatrix(double[][] matrix) {
+        Map<double[][], double[]> res = new HashMap<>();
         
-        int len = matrix.length;
+        int len = matrix.length - 1;
         double[][] prob = new double[len][len];
-        double[] rightSSide = new double[len];
-        for(int i =0; i<len; i++){
-            for(int j=0; j<len; j++){
-                if(j==len-1){
-                    rightSSide[i] = matrix[i][j];
-                }else{
-                    prob[i][j] = matrix[i][j];
+        double[] rightSide = new double[len];
+        
+        for (int i = 1; i <= len; i++) {
+            for (int j = 1; j <= len + 1; j++) { 
+                if (j == len + 1) {
+                    rightSide[i - 1] = matrix[i][j]; 
+                } else {
+                    prob[i - 1][j - 1] = matrix[i][j]; 
                 }
-
             }
         }
-
-        res.put(prob, rightSSide);
-
-
+        
+        res.put(prob, rightSide);
+        
         return res;
     }
     
