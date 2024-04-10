@@ -1,36 +1,42 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Park park = new Park();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Napisz n oraz m");
+        File file = new File("test_case.txt");
+        Scanner sc = new Scanner(file);
+
         int n = sc.nextInt();
         int m = sc.nextInt();
+
         for (int i = 0; i < m; i++) {
-            System.out.println("Napisz punkt startowy alejki, punkt koncowy alejki i jej dlugosc");
             int a = sc.nextInt();
             int b = sc.nextInt();
             int length = sc.nextInt();
             park.addAlley(a, b, length);
         }
-        System.out.println("Napisz ile jest OSK oraz gdzie sie znajduja");
+
         int oskCount = sc.nextInt();
         ArrayList<Integer> osk = new ArrayList<>();
         for (int i = 0; i < oskCount; i++) {
             osk.add(sc.nextInt());
         }
-        System.out.println("Napisz ile jest wyjsc oraz gdzie sie znajduja");
+
         int exitCount = sc.nextInt();
         ArrayList<Integer> exits = new ArrayList<>();
         for (int i = 0; i < exitCount; i++) {
             exits.add(sc.nextInt());
         }
-        System.out.println("Napisz gdzie startuje wędrowiec");
+
         int wanderer = sc.nextInt();
         park.saveToTxt();
         park.valPark(n, osk, exits);
+
+        sc.close();
+
 
         double[][] matrix = park.createProbabilityMatrix();
         System.out.println("Gaaus");
@@ -46,22 +52,7 @@ public class Main {
 
     }
 
-    // public static void testCase(){
-    //     Park park = new Park();
 
-    //     park.addAlley(1 ,2 ,4);
-    //     park.addAlley(2 ,3, 4);
-    //     park.addAlley(3, 4 ,4);
-    //     park.addAlley(1 ,3, 6);
-    //     park.addAlley(1, 4 ,4);
-
-    //     ArrayList<Integer> osk = new ArrayList<>();
-    //     osk.add(1);
-
-    //     ArrayList<Integer> exits = new ArrayList<>();
-    //     exits.add(4);
-    //     park.createProbabilityMatrix(4, osk, exits);
-    // }
 
 
 }
