@@ -51,5 +51,5 @@ def draw_graph(graph, osk, exits, wanderer):
 
     
 
-file_path = "test_case.txt"
+file_path = "/home/bary/kuszi2/Numeryczne2/algnum2/test_case.txt"
 create_graph_from_file(file_path)
