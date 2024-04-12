@@ -1,4 +1,9 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.System;
+import java.util.List;
 import java.util.function.Function;
 
 public class Times {
@@ -13,6 +18,22 @@ public class Times {
         long res = stopTime - startTime;
 
         return res;
+    }
+
+    public static void writeTimesToCSV(List<Double> times) {
+        
+        try (PrintWriter writer = new PrintWriter(new FileWriter("czasy.csv",true))) {
+            
+            for (int i = 0; i < times.size(); i++) {
+                writer.print(times.get(i));
+                if (i < times.size() - 1) {
+                    writer.print(", ");
+                }
+            }
+            writer.println();
+        } catch (IOException e) {
+            System.err.println( e.getMessage());
+        }
     }
 
 }
