@@ -100,25 +100,6 @@ public class Park extends Times {
             matrixForGaus[i][n + 1] = rightSide[i];
         }
 
-        // System.out.println("Połączona macierz probabilities i rightSide:");
-        // for (int i = 1; i <= n; i++) {
-        //     for (int j = 1; j <= n + 1; j++) {
-        //         System.out.print("[" + matrixForGaus[i][j] + "]");
-        //     }
-        //     System.out.println();
-        // }
-        // System.out.println("Gauss without choice:");
-        // printGauss(solveGaus(matrixForGaus));
-
-        // System.out.println("Gaus with partial choice:");
-        // printGauss(solveGausWithChoice(matrixForGaus));
-
-
-        // System.out.println("Gauss-Seidel Iteration:");
-        // double[] initialGuess = new double[n + 1];
-        // Arrays.fill(initialGuess, 0.0);
-        // double[] solution = gaussSeidel(probabilities, rightSide, initialGuess, 0.0001, 1000);
-        // printGauss(solution);
         return matrixForGaus;
     }
     public void getGaus(){
@@ -163,29 +144,12 @@ public class Park extends Times {
         }
         double[] initialGuess = new double[matrix.length];
         Arrays.fill(initialGuess, 0.0);
-        // //debug
-        // System.out.println("Probabilities:");
-        // for (double[] row : prob) {
-        //     for (double value : row) {
-        //         System.out.print(value + " ");
-        //     }
-        //     System.out.println();
-        // }
-        // //debug
-        // System.out.println("Right-side Vector:");
-        // for (double value : rs) {
-        //     System.out.println(value + " ");
-        // }
-        
+       
         final double[][] fprob = prob;
         final double[] frs = rs;
         
         res = gaussSeidel(fprob,frs,initialGuess,0.0001, 1000);
-        // System.out.println(res.length);
-        // //debug
-        // for(int i=0; i<res.length-1; i++){
-        //     System.out.println(res[i]);
-        // }
+        
         return res;
     }
 
@@ -249,8 +213,7 @@ public class Park extends Times {
                 }
                 nextSolution[i] = (rightSide[i] - sum) / coefficients[i][i];
             }
-            // System.out.println("current sol len: "+currentSolution.length);
-            // System.out.println("next len: "+nextSolution.length);
+            
             error = maxError(currentSolution, nextSolution);
             currentSolution = nextSolution.clone();
             iterations++;
@@ -362,20 +325,22 @@ public class Park extends Times {
     private void countExecTime(double[][] matrix){
         
         double executionTime;
+
+        List<Double> list = new ArrayList<>();
         Function<Void,Void> solveGausFunction = (Void) ->{
             solveGaus(matrix);
             return null;
         };
         executionTime = countTime(solveGausFunction);
         System.out.println("gauss without choice exec time: "+ executionTime);
-
+        list.add(executionTime);
         Function<Void,Void> solveGaussWithChoiceFunction = (Void) ->{
             solveGausWithChoice(matrix);
             return null;
         };
         executionTime = countTime(solveGaussWithChoiceFunction);
         System.out.println("gauss with choice exec time: "+ executionTime);
-
+        list.add(executionTime);
         
         double[][] prob = null;
         double[] rs = null;
@@ -394,7 +359,9 @@ public class Park extends Times {
         };
 
         executionTime = countTime(solveGausSiedelFunction);
+        list.add(executionTime);
         System.out.println("gauss seidel exec time: "+ executionTime);
+        Times.writeTimesToCSV(list);
     }
 
     private Map<double[][], double[]> sepMatrix(double[][] matrix) {
