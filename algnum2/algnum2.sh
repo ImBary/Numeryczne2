@@ -14,6 +14,8 @@ do
 
 done
 
+python3 createPlotOfTimes.py
+
 
 
 
