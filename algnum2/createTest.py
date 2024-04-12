@@ -1,8 +1,7 @@
-import random
 import os
-
+num = os.environ.get("num")
 # Generate a random file name for the source file
-source_file_name = f"/home/bary/kuszi2/Numeryczne2/algnum2/test_cases/{random.randint(1, 3)}.txt"
+source_file_name = f"test_cases/{num}.txt"
 destination_file_name = "src/test_case.txt"  # Destination file name
 
 
