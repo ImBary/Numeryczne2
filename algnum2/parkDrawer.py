@@ -47,7 +47,7 @@ def draw_graph(graph, osk, exits, wanderer):
     nx.draw_networkx_edges(graph, pos, edgelist=graph.edges(), edge_color='gray')
     nx.draw_networkx_labels(graph, pos)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
-    plt.show()
+    #plt.show()
 
     
 

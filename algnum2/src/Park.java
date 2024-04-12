@@ -110,20 +110,29 @@ public class Park extends Times {
     }
     public void printGaussWithoutChoice(double[][] matrix){
         
-        double[] wmatrix = solveGausWithChoice(createProbabilityMatrix());
+        double[] wmatrix = solveGausWithChoice(matrix);
         int n = wmatrix.length;
         for(int i =1; i<n; i++){
             System.out.println("x"+(i)+" : "+Math.abs(wmatrix[i]));
         }
-        
+        List<Double> wm = new ArrayList<Double>();
+        for (double value : wmatrix) {
+            wm.add(value);
+        }
+        writeTimesToCSVResullts(wm, "gausChoice.csv");
     }
     public void printGauss(double[][] matrix){
         
-        double[] wmatrix = solveGaus(createProbabilityMatrix());
+        double[] wmatrix = solveGaus(matrix);
         int n = wmatrix.length;
         for(int i =1; i<n; i++){
             System.out.println("x"+(i)+" : "+Math.abs(wmatrix[i]));
         }
+        List<Double> wm = new ArrayList<Double>();
+        for (double value : wmatrix) {
+            wm.add(value);
+        }
+        writeTimesToCSVResullts(wm, "gaus.csv");
         
     }
     public void printGaussSiedel(double[][] matrix) {
@@ -132,6 +141,11 @@ public class Park extends Times {
         for (int i = 0; i < n-1; i++) {
             System.out.println("x" + (i + 1) + " : " + Math.abs(wmatrix[i]));
         }
+        List<Double> wm = new ArrayList<Double>();
+        for (double value : wmatrix) {
+            wm.add(value);
+        }
+        writeTimesToCSVResullts(wm, "gausSiedel.csv");
     }
     private double[] getGaussSeidel(double[][] matrix){
         double[] res = null;

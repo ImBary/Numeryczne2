@@ -36,4 +36,21 @@ public class Times {
         }
     }
 
+    public static void writeTimesToCSVResullts(List<Double> gauses,String path) {
+        
+        try (PrintWriter writer = new PrintWriter(new FileWriter(path,true))) {
+            
+            for (int i = 1; i < gauses.size(); i++) {
+                writer.print(Math.abs(gauses.get(i)));
+                if (i < gauses.size() - 1) {
+                    writer.print(", ");
+                }
+            }
+            writer.println();
+        } catch (IOException e) {
+            System.err.println( e.getMessage());
+        }
+    }
+
+
 }

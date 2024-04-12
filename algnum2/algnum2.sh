@@ -1,5 +1,8 @@
 
 #!/bin/bash
+
+cd ~/Numeryczne2/algnum2/src && rm *.csv && echo "A1, A2, A3" > czasy.csv && touch gaus.csv && touch gausChoice.csv && touch gausSiedel.csv && cd ..
+
 for i in {1..9}
 do
     export num=$i
@@ -15,6 +18,10 @@ do
 done
 
 python3 createPlotOfTimes.py
+python3 h1.py
+mv *.jpg Graphs
+
+
 
 
 
