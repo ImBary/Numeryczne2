@@ -131,6 +131,7 @@ public class Park extends Times {
     private double[] solveGausWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
         double[] x = new double[n + 1];
 
+        // Gaussian elimination with partial pivoting
         for (int i = 1; i <= n; i++) {
             // Find the row with the maximum absolute value in the current column
             int maxRow = i;
@@ -153,7 +154,7 @@ public class Park extends Times {
 
             // Eliminate entries below the pivot
             for (int j = i + 1; j <= n; j++) {
-                double factor;
+                double factor = 0.0;
                 Double valueJ = matrix.get(createPair(j, i));
                 Double valueI = matrix.get(createPair(i, i));
 
@@ -167,7 +168,6 @@ public class Park extends Times {
             }
         }
 
-        // Back substitution to find the solution vector x
         for (int i = n; i >= 1; i--) {
             double sum = 0.0;
             for (int j = i + 1; j <= n; j++) {
@@ -180,7 +180,7 @@ public class Park extends Times {
             Double value1 = matrix.get(createPair(i, n + 1));
             Double value2 = matrix.get(createPair(i, i));
 
-            if (value1 != null && value2 != null && value2 != 0.0) {
+            if (value2 != null && value1 != null && value2 != 0.0) {
                 x[i] = (value1 - sum) / value2;
             }
         }
@@ -188,22 +188,15 @@ public class Park extends Times {
         return x;
     }
 
-
-    public void printGaussWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
-        double[] wmatrix = solveGausWithChoice(matrix);
+    public void printGaussWithChoice() {
+        double[] wmatrix = solveGausWithChoice(createProbabilityMatrix());
         int n = wmatrix.length - 1;
         for (int i = 1; i <= n; i++) {
             System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
         }
     }
 
-    public void printGaussWithChoice(){
-        double[] wmatrix = solveGausWithChoice(createProbabilityMatrix());
-        int n = wmatrix.length - 1;
-        for(int i = 1; i <= n; i++){
-            System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
-        }
-    }
+
     //--------------------------------------------------------------------------------------------
     //------------------------------------Gauss Seidel--------------------------------------------
 

@@ -38,7 +38,6 @@ public class Main {
 
         sc.close();
 
-        System.out.println("Gauss");
         System.out.println("Gaaus");
         park.printGauss();
         System.out.println("Gaus seidel");
@@ -46,7 +45,7 @@ public class Main {
         System.out.println("gaus choice");
         park.printGaussWithChoice();
 
-        park.getExecTime();
+        //park.getExecTime();
 
         //System.out.println("Monte carlo:"+park.monte(10000, wanderer));
     }
