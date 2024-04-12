@@ -3,7 +3,7 @@ import os
 
 # Generate a random file name for the source file
 source_file_name = f"/home/bary/kuszi2/Numeryczne2/algnum2/test_cases/{random.randint(1, 3)}.txt"
-destination_file_name = "test_case.txt"  # Destination file name
+destination_file_name = "src/test_case.txt"  # Destination file name
 
 
 # Now, copy the contents from the source file to the destination file
