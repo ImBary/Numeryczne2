@@ -1,13 +1,15 @@
 import java.util.*;
 import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.function.Function;
+
 /*
     TODO:
-        1. DZIAŁA Napraw createProbabilityMatrix chyba zwraca ciągle złe wyniki bo najdłuzsza ma najwieksze prawdopodobienstwo
-        2. Wyswietlanie wyników gaussnaider
- */
+        1. Gauss seidel
+        2. zmiana tablicy 2D na map<map<>, double>
+            a. zmienione w lengths zmienone w prawdopodobienstwie
+            b. gauss no choice gauss choice
+*/
 public class Park extends Times {
     private Map<Integer, Intersection> intersections = new HashMap<>();
     private List<Alley> alleys = new ArrayList<>();
@@ -37,70 +39,86 @@ public class Park extends Times {
         addAlley(alley);
     }
 
-    private int[][] createLengthsMatrix(int n, ArrayList<Integer> osk, ArrayList<Integer> exits){
-        int[][] lengths = new int[n + 1][n + 1];
+    private Map<Map<Integer, Integer>, Double> createLengthsMatrix( ArrayList<Integer> osk, ArrayList<Integer> exits){
+        Map<Map<Integer, Integer>, Double> lengthsMap = new HashMap<>();
+
         for (Alley alley : alleys) {
             if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
-                lengths[alley.getA().getId()][alley.getB().getId()] = alley.getLength();
+                Map<Integer, Integer> idMap = new HashMap<>();
+                idMap.put(alley.getA().getId(), alley.getB().getId());
+                lengthsMap.put(idMap, (double) alley.getLength());
             }
             if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
-                lengths[alley.getB().getId()][alley.getA().getId()] = alley.getLength();
+                Map<Integer, Integer> idMap = new HashMap<>();
+                idMap.put(alley.getB().getId(), alley.getA().getId());
+                lengthsMap.put(idMap, (double) alley.getLength());
             }
         }
-        return lengths;
+        return lengthsMap;
     }
 
-    public double[][] createProbabilityMatrix() {
-       
-        int[][] lengths = createLengthsMatrix(n, osk, exits);
-        double[][] probabilities = new double[n + 1][n + 1];
+    public Map<Map<Integer, Integer>, Double> createProbabilityMatrix() {
+
+        Map<Map<Integer, Integer>, Double> lengths = createLengthsMatrix(osk, exits);
+        Map<Map<Integer, Integer>, Double> probabilities = new HashMap<>();
 
         double[] inverseSums = new double[n + 1];
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                inverseSums[i] += (j != i && lengths[i][j] != 0) ? (1.0 / (double) lengths[i][j]) : 0.0;
+        for (Map.Entry<Map<Integer, Integer>, Double> entry : lengths.entrySet()) {
+            Map<Integer, Integer> idMap = entry.getKey();
+            double length = entry.getValue();
+
+            int fromVertex = idMap.keySet().iterator().next();
+            int toVertex = idMap.values().iterator().next();
+
+            if (fromVertex != toVertex && length != 0) {
+                inverseSums[fromVertex] += 1.0 / length;
             }
         }
 
+        for (Map.Entry<Map<Integer, Integer>, Double> entry : lengths.entrySet()) {
+            Map<Integer, Integer> idMap = entry.getKey();
+            double length = entry.getValue();
+
+            int fromVertex = idMap.keySet().iterator().next();
+            int toVertex = idMap.values().iterator().next();
+
+            double probability;
+            if (fromVertex == toVertex) {
+                probability = 1.0;
+            } else if (length != 0) {
+                probability = (1.0 / length) / inverseSums[fromVertex];
+            } else {
+                probability = 0.0;
+            }
+
+            probabilities.put(idMap, probability);
+        }
+
         for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (i == j) {
-                    probabilities[i][j] = 1.0; // Probability of staying at the same vertex
-                } else if (lengths[i][j] != 0) {
-                    probabilities[i][j] = (1.0 / (double) lengths[i][j]) / inverseSums[i];
-                } else {
-                    probabilities[i][j] = 0.0; // No direct connection, set probability to 0
-                }
+            Map<Integer, Integer> id = new HashMap<>();
+            id.put(i, i);
+            probabilities.put(id, 1.0);
+        }
+
+        for (int i = 1; i <= n; i++) {
+            if (exits.contains(i)) {
+                Map<Integer, Integer> idMap = new HashMap<>();
+                idMap.put(i, n+1);
+                probabilities.put(idMap, 1.0);
             }
         }
 
-        double[] rightSide = new double[n + 1];
-        for (Integer exit : exits) {
-            rightSide[exit] = 1.0;
-        }
+        //DEBUG probabilities
+        /*for (Map.Entry<Map<Integer, Integer>, Double> entry : probabilities.entrySet()) {
+            Map<Integer, Integer> idMap = entry.getKey();
+            Double value = entry.getValue();
 
+            System.out.print("Keys: ");
+            idMap.forEach((k, v) -> System.out.print("(" + k + ", " + v + ") "));
+            System.out.println("val: " + value);
+        }*/
 
-        // System.out.println("Macierz prawdopodobieństwa");
-        // for (int i = 1; i <= n; i++) {
-        //     for (int j = 1; j <= n; j++) {
-        //         System.out.print("[" + probabilities[i][j] + "]");
-        //     }
-        //     System.out.println(" = [" + rightSide[i] + "]");
-        // }
-
-        
-
-        double[][] matrixForGaus = new double[n + 1][n + 2];
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                matrixForGaus[i][j] = probabilities[i][j];
-            }
-        }
-        for (int i = 1; i <= n; i++) {
-            matrixForGaus[i][n + 1] = rightSide[i];
-        }
-
-        return matrixForGaus;
+        return probabilities;
     }
     public void getGaus(){
         getGaus();
@@ -108,167 +126,206 @@ public class Park extends Times {
     public void getGaus(double[] matrix){
 
     }
-    public void printGaussWithoutChoice(double[][] matrix){
-        
-        double[] wmatrix = solveGausWithChoice(matrix);
-        int n = wmatrix.length;
-        for(int i =1; i<n; i++){
-            System.out.println("x"+(i)+" : "+Math.abs(wmatrix[i]));
-        }
-        List<Double> wm = new ArrayList<Double>();
-        for (double value : wmatrix) {
-            wm.add(value);
-        }
-        writeTimesToCSVResullts(wm, "gausChoice.csv");
-    }
-    public void printGauss(double[][] matrix){
-        
-        double[] wmatrix = solveGaus(matrix);
-        int n = wmatrix.length;
-        for(int i =1; i<n; i++){
-            System.out.println("x"+(i)+" : "+Math.abs(wmatrix[i]));
-        }
-        List<Double> wm = new ArrayList<Double>();
-        for (double value : wmatrix) {
-            wm.add(value);
-        }
-        writeTimesToCSVResullts(wm, "gaus.csv");
-        
-    }
-    public void printGaussSiedel(double[][] matrix) {
-        double[] wmatrix = getGaussSeidel(matrix);
-        int n = wmatrix.length;
-        for (int i = 0; i < n-1; i++) {
-            System.out.println("x" + (i + 1) + " : " + Math.abs(wmatrix[i]));
-        }
-        List<Double> wm = new ArrayList<Double>();
-        for (double value : wmatrix) {
-            wm.add(value);
-        }
-        writeTimesToCSVResullts(wm, "gausSiedel.csv");
-    }
-    private double[] getGaussSeidel(double[][] matrix){
-        double[] res = null;
-        double[][] prob = null;
-        double[] rs = null;
-        Map<double[][],double[]> separetedMatrix = sepMatrix(matrix);
-        for( Map.Entry<double[][], double[]> entry : separetedMatrix.entrySet()){
-            prob = entry.getKey();
-            rs = entry.getValue();
-        }
-        double[] initialGuess = new double[matrix.length];
-        Arrays.fill(initialGuess, 0.0);
-       
-        final double[][] fprob = prob;
-        final double[] frs = rs;
-        
-        res = gaussSeidel(fprob,frs,initialGuess,0.0001, 1000);
-        
-        return res;
-    }
+    //---------------------------------------Gauss with choice------------------------------------
 
-    private double[] solveGausWithChoice(double[][] matrix) {
-        int n = matrix.length;
-    
-        for (int i = 0; i < n; i++) {
-            // maax w kolumnie
-            double maxElement = Math.abs(matrix[i][i]);
+    private double[] solveGausWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
+        double[] x = new double[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            // Find the row with the maximum absolute value in the current column
             int maxRow = i;
-            for (int j = i + 1; j < n; j++) {
-                if (Math.abs(matrix[j][i]) > maxElement) {
-                    maxElement = Math.abs(matrix[j][i]);
+            for (int j = i + 1; j <= n; j++) {
+                if (matrix.get(createPair(j, i)) != null &&
+                        (matrix.get(createPair(maxRow, i)) == null ||
+                                Math.abs(matrix.get(createPair(j, i))) > Math.abs(matrix.get(createPair(maxRow, i))))) {
                     maxRow = j;
                 }
             }
-            //zamieniamy wiersze
-            double[] tmpRow = matrix[maxRow];
-            matrix[maxRow] = matrix[i];
-            matrix[i] = tmpRow;
-    
-            // sprawdzamy zeby nie dzielic przez zero 
-            if (Math.abs(matrix[i][i]) <= 1e-10) {
-                matrix[i][i] = 1e-10;
-            }
-            for (int j = i + 1; j < n; j++) {
-                double factor = matrix[j][i] / matrix[i][i];
-                for (int k = i; k <= n; k++) {
-                    matrix[j][k] -= factor * matrix[i][k];
+
+            // Swap rows if necessary
+            if (maxRow != i) {
+                for (int k = i; k <= n + 1; k++) {
+                    double temp = matrix.getOrDefault(createPair(i, k), 0.0);
+                    matrix.put(createPair(i, k), matrix.getOrDefault(createPair(maxRow, k), 0.0));
+                    matrix.put(createPair(maxRow, k), temp);
                 }
             }
-        }
 
-        double[] x = new double[n];
-        for (int i = n - 1; i >= 0; i--) {
-            x[i] = matrix[i][n];
-            for (int j = i + 1; j < n; j++) {
-                x[i] -= matrix[i][j] * x[j];
-            }
-            x[i] /= matrix[i][i];
-        }
+            // Eliminate entries below the pivot
+            for (int j = i + 1; j <= n; j++) {
+                double factor;
+                Double valueJ = matrix.get(createPair(j, i));
+                Double valueI = matrix.get(createPair(i, i));
 
-        return x;
-    }
-
-    private double[] gaussSeidel(double[][] coefficients, double[] rightSide, double[] initialGuess, double tolerance, int maxIterations) {
-        int n = coefficients.length - 1;
-        double[] currentSolution = initialGuess.clone();
-        double[] nextSolution = new double[initialGuess.length];
-
-        int iterations = 0;
-        double error = tolerance + 1;
-
-        while (error > tolerance && iterations < maxIterations) {
-            for (int i = 1; i <= n; i++) {
-                double sum = 0.0;
-                for (int j = 1; j <= n; j++) {
-                    if (j != i) {
-                        sum += coefficients[i][j] * nextSolution[j];
+                if (valueJ != null && valueI != null && valueI != 0.0) {
+                    factor = valueJ / valueI;
+                    for (int k = i; k <= n + 1; k++) {
+                        double val = matrix.getOrDefault(createPair(j, k), 0.0) - factor * matrix.getOrDefault(createPair(i, k), 0.0);
+                        matrix.put(createPair(j, k), val);
                     }
                 }
-                nextSolution[i] = (rightSide[i] - sum) / coefficients[i][i];
             }
-            
-            error = maxError(currentSolution, nextSolution);
-            currentSolution = nextSolution.clone();
-            iterations++;
         }
 
-        return nextSolution;
-    }
-
-    private double maxError(double[] currentSolution, double[] nextSolution) {
-        double maxError = 0.0;
-        for (int i = 1; i < currentSolution.length; i++) {
-            maxError = Math.max(maxError, Math.abs(nextSolution[i] - currentSolution[i]));
-        }
-        return maxError;
-    }
-
-    private double[] solveGaus(double[][] matrix){
-        int n = matrix.length;
-        for(int i=0; i<n; i++){
-            if(matrix[i][i]<=1e-10){
-                matrix[i][i] = 1e-10;
-            }
-            for(int j =i+1; j<n; j++){
-                double factor = matrix[j][i] / matrix[i][i];
-                for(int k = i; k<=n; k++){
-                    matrix[j][k] -= factor * matrix[i][k];
+        // Back substitution to find the solution vector x
+        for (int i = n; i >= 1; i--) {
+            double sum = 0.0;
+            for (int j = i + 1; j <= n; j++) {
+                Double valueIJ = matrix.get(createPair(i, j));
+                if (valueIJ != null) {
+                    sum += valueIJ * x[j];
                 }
             }
-        }
-        double[] x = new double[n];
-        for (int i = n - 1; i >= 0; i--) {
-            x[i] = matrix[i][n];
-            for (int j = i + 1; j < n; j++) {
-                x[i] -= matrix[i][j] * x[j];
+
+            Double value1 = matrix.get(createPair(i, n + 1));
+            Double value2 = matrix.get(createPair(i, i));
+
+            if (value1 != null && value2 != null && value2 != 0.0) {
+                x[i] = (value1 - sum) / value2;
             }
-            x[i] /= matrix[i][i];
         }
 
         return x;
-
     }
+
+
+    public void printGaussWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
+        double[] wmatrix = solveGausWithChoice(matrix);
+        int n = wmatrix.length - 1;
+        for (int i = 1; i <= n; i++) {
+            System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
+        }
+    }
+
+    public void printGaussWithChoice(){
+        double[] wmatrix = solveGausWithChoice(createProbabilityMatrix());
+        int n = wmatrix.length - 1;
+        for(int i = 1; i <= n; i++){
+            System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
+        }
+    }
+    //--------------------------------------------------------------------------------------------
+    //------------------------------------Gauss Seidel--------------------------------------------
+
+    private double[] solveGaussSeidel(Map<Map<Integer, Integer>, Double> matrix) {
+        double[] x = new double[n + 2];
+        double[] xNew = new double[n + 2];
+        double epsilon = 1e-10;
+        int maxIterations = 1000;
+
+        for (int iter = 0; iter < maxIterations; iter++) {
+            double error = 0.0;
+
+            for (int i = 1; i <= n; i++) {
+                double sum = 0.0;
+                double diagonalValue = matrix.getOrDefault(createPair(i, i), 0.0);
+
+                for (int j = 1; j <= n; j++) {
+                    if (j != i) {
+                        sum += matrix.getOrDefault(createPair(i, j), 0.0) * ((iter == 0) ? 0.0 : xNew[j]);
+                    }
+                }
+
+                if (diagonalValue != 0.0) {
+                    sum += matrix.getOrDefault(createPair(i, n + 1), 0.0) * ((iter == 0) ? 0.0 : xNew[n+1]);
+                    xNew[i] = (matrix.getOrDefault(createPair(i, n + 1), 0.0) - sum) / diagonalValue;
+                } else {
+                    xNew[i] = 0.0;
+                }
+
+                error += Math.abs(xNew[i] - x[i]);
+            }
+
+            if (error < epsilon) {
+                break;
+            }
+
+            System.arraycopy(xNew, 1, x, 1, n); // Update x for the next iteration
+        }
+
+        return x;
+    }
+
+    public void printGaussSiedel() {
+        double[] wmatrix = solveGaussSeidel(createProbabilityMatrix());
+        int n = wmatrix.length - 2;
+        for (int i = 1; i <= n; i++) {
+            System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------
+    //---------------------------------GAUSS NORMAL-----------------------------------------------
+
+    public double[] solveGaus(Map<Map<Integer, Integer>, Double> matrix) {
+        if (matrix == null) {
+            throw new IllegalArgumentException("Matrix cannot be null.");
+        }
+
+        for (int i = 1; i <= n; i++) {
+            Map<Integer, Integer> key = createPair(i, i);
+            if (!matrix.containsKey(key) || matrix.get(key) <= 1e-10) {
+                matrix.put(key, 1e-10);
+                System.out.println("Blad");
+            }
+            for (int j = i + 1; j <= n; j++) {
+                double divisor = matrix.get(key);
+                if (divisor == 0.0) {
+                    throw new IllegalArgumentException("Divide by zero error");
+                }
+                Map<Integer, Integer> keyJ = createPair(j, i);
+                if (!matrix.containsKey(keyJ)) {
+                    continue;
+                }
+                double factor = matrix.get(keyJ) / divisor;
+                for (int k = i; k <= n + 1; k++) {
+                    Map<Integer, Integer> keyJK = createPair(j, k);
+                    Map<Integer, Integer> keyIK = createPair(i, k);
+                    double val = matrix.getOrDefault(keyJK, 0.0) - factor * matrix.getOrDefault(keyIK, 0.0);
+                    matrix.put(keyJK, val);
+                }
+            }
+        }
+        double[] x = new double[n + 1];
+        for (int i = n; i >= 1; i--) {
+            double sum = 0.0;
+            for (int j = i + 1; j <= n; j++) {
+                Map<Integer, Integer> keyIJ = createPair(i, j);
+                if (!matrix.containsKey(keyIJ)) {
+                    continue;
+                }
+                sum += matrix.get(keyIJ) * x[j];
+            }
+            Map<Integer, Integer> key2 = createPair(i, i);
+            if (!matrix.containsKey(key2)) {
+                continue;
+            }
+            double diagonalValue = matrix.get(key2);
+            if (diagonalValue == 0.0) {
+                throw new IllegalArgumentException("Divide by zero error");
+            }
+            Map<Integer, Integer> keyIN = createPair(i, n + 1);
+            x[i] = (matrix.getOrDefault(keyIN, 0.0) - sum) / diagonalValue;
+        }
+        return x;
+    }
+
+    private static Map<Integer, Integer> createPair(int i, int j) {
+        Map<Integer, Integer> pair = new HashMap<>();
+        pair.put(i, j);
+        return pair;
+    }
+
+    public void printGauss() {
+        double[] solution = solveGaus(createProbabilityMatrix());
+        int n = solution.length - 1;
+        for (int i = 1; i <= n; i++) {
+            System.out.println("x" + i + " : " + Math.abs(solution[i]));
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------
+
     //MONTE
     public double monte(int N, int wanderer){
         double prob=0.0;
@@ -332,11 +389,11 @@ public class Park extends Times {
     }
 
     public void getExecTime(){
-        double[][] matrix = createProbabilityMatrix();
+        Map<Map<Integer, Integer>, Double> matrix = createProbabilityMatrix();
         countExecTime(matrix);
     }
 
-    private void countExecTime(double[][] matrix){
+    private void countExecTime(Map<Map<Integer, Integer>, Double> matrix){
         
         double executionTime;
 
@@ -355,20 +412,9 @@ public class Park extends Times {
         executionTime = countTime(solveGaussWithChoiceFunction);
         System.out.println("gauss with choice exec time: "+ executionTime);
         list.add(executionTime);
-        
-        double[][] prob = null;
-        double[] rs = null;
-        Map<double[][],double[]> separetedMatrix = sepMatrix(matrix);
-        for( Map.Entry<double[][], double[]> entry : separetedMatrix.entrySet()){
-            prob = entry.getKey();
-            rs = entry.getValue();
-        }
-        double[] initialGuess = new double[matrix.length];
-        Arrays.fill(initialGuess, 0.0);
-        final double[][] fprob = prob;
-        final double[] frs = rs;
+
         Function<Void,Void> solveGausSiedelFunction = (Void) ->{
-            gaussSeidel(fprob,frs,initialGuess,0.0001, 1000);
+            solveGaussSeidel(matrix);
             return null;
         };
 
@@ -377,29 +423,5 @@ public class Park extends Times {
         System.out.println("gauss seidel exec time: "+ executionTime);
         Times.writeTimesToCSV(list);
     }
-
-    private Map<double[][], double[]> sepMatrix(double[][] matrix) {
-        Map<double[][], double[]> res = new HashMap<>();
-        
-        int len = matrix.length - 1;
-        double[][] prob = new double[len][len];
-        double[] rightSide = new double[len];
-        
-        for (int i = 1; i <= len; i++) {
-            for (int j = 1; j <= len + 1; j++) { 
-                if (j == len + 1) {
-                    rightSide[i - 1] = matrix[i][j]; 
-                } else {
-                    prob[i - 1][j - 1] = matrix[i][j]; 
-                }
-            }
-        }
-        
-        res.put(prob, rightSide);
-        
-        return res;
-    }
-    
-
 }
 

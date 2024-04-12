@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Park park = new Park();
         File starting = new File(System.getProperty("user.dir"));
-        File file = new File(starting,"test_case.txt");
+        File file = new File(starting,"src/test_case.txt");
         Scanner sc = new Scanner(file);
 
         int n = sc.nextInt();
@@ -38,33 +38,16 @@ public class Main {
 
         sc.close();
 
-
-        double[][] matrix = park.createProbabilityMatrix();
+        System.out.println("Gauss");
         System.out.println("Gaaus");
-        park.printGauss(matrix);
-        System.out.println("Gaus sidel");
-        park.printGaussSiedel(matrix);
+        park.printGauss();
+        System.out.println("Gaus seidel");
+        park.printGaussSiedel();
         System.out.println("gaus choice");
-        park.printGaussWithoutChoice(matrix);
+        park.printGaussWithChoice();
 
         park.getExecTime();
 
         //System.out.println("Monte carlo:"+park.monte(10000, wanderer));
-
     }
-
-
-
-
 }
-/*
- 4, 5
- 1 ,2 ,4
- 2 ,3, 4
- 3, 4 ,4
- 1 ,3, 6
- 1, 4 ,4
- 1 ,1
- 1 ,4
- 3
-* */
