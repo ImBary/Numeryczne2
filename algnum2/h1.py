@@ -43,7 +43,7 @@ for i in range(min(len(gaus_data), len(gaus_choice_data))):
     plt.xlabel('X(n)')
     plt.ylabel('Absolute Difference')
     plt.grid(True)
-    plt.savefig(f'h1_plot_{i}.jpg')  
+    plt.savefig(f'h1_plot_{i+1}.jpg')  
     plt.close()  
 
 
