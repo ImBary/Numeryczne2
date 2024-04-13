@@ -172,10 +172,10 @@ public class Park extends Times {
                 }
             }
 
-            Double value1 = matrix.get(createPair(i, n + 1));
+            Double value1 = matrix.getOrDefault(createPair(i, n + 1), 0.0);
             Double value2 = matrix.get(createPair(i, i));
 
-            if (value2 != null && value1 != null && value2 != 0.0) {
+            if (value2 != 0.0) {
                 x[i] = (value1 - sum) / value2;
             }
         }
