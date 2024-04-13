@@ -120,12 +120,7 @@ public class Park extends Times {
 
         return probabilities;
     }
-    public void getGaus(){
-        getGaus();
-    }
-    public void getGaus(double[] matrix){
-
-    }
+    
     //---------------------------------------Gauss with choice------------------------------------
 
     private double[] solveGausWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
@@ -194,6 +189,11 @@ public class Park extends Times {
         for (int i = 1; i <= n; i++) {
             System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
         }
+        List<Double> wm = new ArrayList<Double>();
+        for (double value : wmatrix) {
+            wm.add(value);
+        }
+        writeTimesToCSVResullts(wm, "gausChoice.csv");
     }
 
 
@@ -245,6 +245,11 @@ public class Park extends Times {
         for (int i = 1; i <= n; i++) {
             System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
         }
+        List<Double> wm = new ArrayList<Double>();
+        for (double value : wmatrix) {
+            wm.add(value);
+        }
+        writeTimesToCSVResullts(wm, "gausSiedel.csv");
     }
 
     //--------------------------------------------------------------------------------------------
@@ -315,6 +320,11 @@ public class Park extends Times {
         for (int i = 1; i <= n; i++) {
             System.out.println("x" + i + " : " + Math.abs(solution[i]));
         }
+        List<Double> wm = new ArrayList<Double>();
+        for (double value : solution) {
+            wm.add(value);
+        }
+        writeTimesToCSVResullts(wm, "gaus.csv");
     }
 
     //--------------------------------------------------------------------------------------------

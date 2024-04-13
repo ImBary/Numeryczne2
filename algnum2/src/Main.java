@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Park park = new Park();
         File starting = new File(System.getProperty("user.dir"));
-        File file = new File(starting,"src/test_case.txt");
+        File file = new File(starting,"test_case.txt");
         Scanner sc = new Scanner(file);
 
         int n = sc.nextInt();
