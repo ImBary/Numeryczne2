@@ -2,6 +2,9 @@ import os
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
+num = os.environ.get("num")
+
 def create_graph_from_file(file_path):
     G = nx.Graph()
     linec = 0
@@ -32,8 +35,6 @@ def create_graph_from_file(file_path):
                 wanderer = info[0]
     draw_graph(G, osk, exits, wanderer)
 
-    
-
 def draw_graph(graph, osk, exits, wanderer):
     pos = nx.spring_layout(graph)
     edge_labels = nx.get_edge_attributes(graph, 'length')
@@ -47,9 +48,7 @@ def draw_graph(graph, osk, exits, wanderer):
     nx.draw_networkx_edges(graph, pos, edgelist=graph.edges(), edge_color='gray')
     nx.draw_networkx_labels(graph, pos)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
-    #plt.show()
-
-    
+    plt.savefig(f"Graphs/{num}.jpg")
 
 file_path = "/home/bary/kuszi2/Numeryczne2/algnum2/test_case.txt"
 create_graph_from_file(file_path)
