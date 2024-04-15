@@ -50,3 +50,12 @@ public class Main {
         //System.out.println("Monte carlo:"+park.monte(10000, wanderer));
     }
 }
+/*
+x1 : 0.4999999999999999
+x2 : 0.7499999999999999
+x3 : 1.0
+x4 : 0.0
+x5 : 0.0
+x6 : 0.0
+x7 : 0.0
+ */

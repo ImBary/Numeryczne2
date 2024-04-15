@@ -43,17 +43,22 @@ public class Park extends Times {
         Map<Map<Integer, Integer>, Double> lengthsMap = new HashMap<>();
 
         for (Alley alley : alleys) {
-            if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
-                Map<Integer, Integer> idMap = new HashMap<>();
-                idMap.put(alley.getA().getId(), alley.getB().getId());
-                lengthsMap.put(idMap, (double) alley.getLength());
-            }
-            if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
-                Map<Integer, Integer> idMap = new HashMap<>();
-                idMap.put(alley.getB().getId(), alley.getA().getId());
-                lengthsMap.put(idMap, (double) alley.getLength());
+            if (lengthsMap.containsKey(createPair(alley.getA().getId(), alley.getB().getId()))) {
+                lengthsMap.put(createPair(alley.getA().getId(), alley.getB().getId()), (double) alley.getLength());
+            } else {
+                if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
+                    Map<Integer, Integer> idMap = new HashMap<>();
+                    idMap.put(alley.getA().getId(), alley.getB().getId());
+                    lengthsMap.put(idMap, (double) alley.getLength());
+                }
+                if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
+                    Map<Integer, Integer> idMap = new HashMap<>();
+                    idMap.put(alley.getB().getId(), alley.getA().getId());
+                    lengthsMap.put(idMap, (double) alley.getLength());
+                }
             }
         }
+        System.out.println(lengthsMap);
         return lengthsMap;
     }
 
