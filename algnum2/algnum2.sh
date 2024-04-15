@@ -9,11 +9,9 @@ do
     python3 createTest.py
     python3 parkDrawer.py
     cd src
-    pwd
     javac Main.java
     java Main.java
     cd ..
-    pwd
 
 done
 

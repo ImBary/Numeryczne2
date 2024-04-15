@@ -1,0 +1,321 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.16)  15 APR 2024 19:42
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**sprawozdanie.tex
+(./sprawozdanie.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21>
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count185
+\c@section=\count186
+\c@subsection=\count187
+\c@subsubsection=\count188
+\c@paragraph=\count189
+\c@subparagraph=\count190
+\c@figure=\count191
+\c@table=\count192
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2021/03/04 v1.4d Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen139
+\Gin@req@width=\dimen140
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count193
+\l__pdf_internal_box=\box50
+)
+No file sprawozdanie.aux.
+\openout1 = `sprawozdanie.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count194
+\scratchdimen=\dimen141
+\scratchbox=\box51
+\nofMPsegments=\count195
+\nofMParguments=\count196
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count197
+\MPscratchDim=\dimen142
+\MPnumerator=\count198
+\makeMPintoPDFobject=\count199
+\everyMPtoPDFconversion=\toks18
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 7.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 7.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 7.
+<1.jpg, id=1, 462.528pt x 346.896pt>
+File: 1.jpg Graphic file (type jpg)
+<use 1.jpg>
+Package pdftex.def Info: 1.jpg  used on input line 11.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+<2.jpg, id=2, 462.528pt x 346.896pt>
+File: 2.jpg Graphic file (type jpg)
+<use 2.jpg>
+Package pdftex.def Info: 2.jpg  used on input line 16.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<3.jpg, id=3, 462.528pt x 346.896pt>
+File: 3.jpg Graphic file (type jpg)
+<use 3.jpg>
+Package pdftex.def Info: 3.jpg  used on input line 21.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<4.jpg, id=4, 462.528pt x 346.896pt>
+File: 4.jpg Graphic file (type jpg)
+<use 4.jpg>
+Package pdftex.def Info: 4.jpg  used on input line 26.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<5.jpg, id=5, 462.528pt x 346.896pt>
+File: 5.jpg Graphic file (type jpg)
+<use 5.jpg>
+Package pdftex.def Info: 5.jpg  used on input line 31.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<6.jpg, id=6, 462.528pt x 346.896pt>
+File: 6.jpg Graphic file (type jpg)
+<use 6.jpg>
+Package pdftex.def Info: 6.jpg  used on input line 36.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<7.jpg, id=7, 462.528pt x 346.896pt>
+File: 7.jpg Graphic file (type jpg)
+<use 7.jpg>
+Package pdftex.def Info: 7.jpg  used on input line 41.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<8.jpg, id=8, 462.528pt x 346.896pt>
+File: 8.jpg Graphic file (type jpg)
+<use 8.jpg>
+Package pdftex.def Info: 8.jpg  used on input line 46.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<9.jpg, id=9, 462.528pt x 346.896pt>
+File: 9.jpg Graphic file (type jpg)
+<use 9.jpg>
+Package pdftex.def Info: 9.jpg  used on input line 51.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+File: 1.jpg Graphic file (type jpg)
+<use 1.jpg>
+Package pdftex.def Info: 1.jpg  used on input line 59.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 2.jpg Graphic file (type jpg)
+<use 2.jpg>
+Package pdftex.def Info: 2.jpg  used on input line 64.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 3.jpg Graphic file (type jpg)
+<use 3.jpg>
+Package pdftex.def Info: 3.jpg  used on input line 69.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 4.jpg Graphic file (type jpg)
+<use 4.jpg>
+Package pdftex.def Info: 4.jpg  used on input line 74.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 5.jpg Graphic file (type jpg)
+<use 5.jpg>
+Package pdftex.def Info: 5.jpg  used on input line 79.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 6.jpg Graphic file (type jpg)
+<use 6.jpg>
+Package pdftex.def Info: 6.jpg  used on input line 84.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 7.jpg Graphic file (type jpg)
+<use 7.jpg>
+Package pdftex.def Info: 7.jpg  used on input line 89.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 8.jpg Graphic file (type jpg)
+<use 8.jpg>
+Package pdftex.def Info: 8.jpg  used on input line 94.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 9.jpg Graphic file (type jpg)
+<use 9.jpg>
+Package pdftex.def Info: 9.jpg  used on input line 99.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./1.jpg>]
+File: 1.jpg Graphic file (type jpg)
+<use 1.jpg>
+Package pdftex.def Info: 1.jpg  used on input line 111.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 2.jpg Graphic file (type jpg)
+<use 2.jpg>
+Package pdftex.def Info: 2.jpg  used on input line 116.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 3.jpg Graphic file (type jpg)
+<use 3.jpg>
+Package pdftex.def Info: 3.jpg  used on input line 121.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 4.jpg Graphic file (type jpg)
+<use 4.jpg>
+Package pdftex.def Info: 4.jpg  used on input line 126.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 5.jpg Graphic file (type jpg)
+<use 5.jpg>
+Package pdftex.def Info: 5.jpg  used on input line 131.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 6.jpg Graphic file (type jpg)
+<use 6.jpg>
+Package pdftex.def Info: 6.jpg  used on input line 136.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 7.jpg Graphic file (type jpg)
+<use 7.jpg>
+Package pdftex.def Info: 7.jpg  used on input line 141.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 8.jpg Graphic file (type jpg)
+<use 8.jpg>
+Package pdftex.def Info: 8.jpg  used on input line 146.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+File: 9.jpg Graphic file (type jpg)
+<use 9.jpg>
+Package pdftex.def Info: 9.jpg  used on input line 151.
+(pdftex.def)             Requested size: 258.75pt x 194.06987pt.
+ [2 <./2.jpg> <./3.jpg>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[3 <./4.jpg> <./5.jpg>] [4 <./6.jpg> <./7.jpg>] [5 <./8.jpg> <./9.jpg>]
+[6] [7] [8] [9] [10] [11] [12] [13] [14] (./sprawozdanie.aux) ) 
+Here is how much of TeX's memory you used:
+ 1333 strings out of 480247
+ 21234 string characters out of 5896151
+ 311726 words of memory out of 5000000
+ 19307 multiletter control sequences out of 15000+600000
+ 472899 words of font info for 40 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 55i,7n,62p,281b,228s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on sprawozdanie.pdf (14 pages, 196582 bytes).
+PDF statistics:
+ 79 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+

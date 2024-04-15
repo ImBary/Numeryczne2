@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Park park = new Park();
         File starting = new File(System.getProperty("user.dir"));
-        File file = new File(starting,"src/test_case.txt");
+        File file = new File(starting,"test_case.txt");
         Scanner sc = new Scanner(file);
 
         int n = sc.nextInt();
@@ -45,7 +45,7 @@ public class Main {
         System.out.println("gaus choice");
         park.printGaussWithChoice();
 
-        //park.getExecTime();
+        park.getExecTime();
 
         //System.out.println("Monte carlo:"+park.monte(10000, wanderer));
     }
