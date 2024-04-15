@@ -30,6 +30,7 @@ def perform_paired_t_test(data1, data2):
 
 gaus_data = read_variable_length_csv('src/gaus.csv')
 gaus_choice_data = read_variable_length_csv('src/gausChoice.csv')
+gaus_seidel_data = read_variable_length_csv('src/gausSiedel.csv')
 
 
 for i in range(min(len(gaus_data), len(gaus_choice_data))):
@@ -45,5 +46,20 @@ for i in range(min(len(gaus_data), len(gaus_choice_data))):
     plt.grid(True)
     plt.savefig(f'h1_plot_{i+1}.jpg')  
     plt.close()  
+
+for i in range(min(len(gaus_data), len(gaus_seidel_data))):
+    t_test_result = perform_paired_t_test(gaus_data[i], gaus_seidel_data[i])
+    
+    all_differences = collect_absolute_differences([gaus_data[i]], [gaus_seidel_data[i]])
+    
+    plt.figure(figsize=(10, 5))
+    plt.plot(all_differences, marker='o', linestyle='', markersize=5)
+    plt.title(f'Difference between A1 and A3')
+    plt.xlabel('X(n)')
+    plt.ylabel('Absolute Difference')
+    plt.grid(True)
+    plt.savefig(f'h2_plot_{i+1}.jpg')  
+    plt.close()  
+
 
 
