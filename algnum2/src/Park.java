@@ -46,12 +46,12 @@ public class Park extends Times {
             if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
                 Map<Integer, Integer> idMap = new HashMap<>();
                 idMap.put(alley.getA().getId(), alley.getB().getId());
-                lengthsMap.put(idMap, (double) alley.getLength());
+                lengthsMap.put(idMap, (double) alley.length);
             }
             if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
                 Map<Integer, Integer> idMap = new HashMap<>();
                 idMap.put(alley.getB().getId(), alley.getA().getId());
-                lengthsMap.put(idMap, (double) alley.getLength());
+                lengthsMap.put(idMap, (double) alley.length);
             }
         }
         return lengthsMap;
@@ -353,7 +353,7 @@ public class Park extends Times {
                     }
                 }
                 wanderer.alley = possibleAlleys.get(rand.nextInt(possibleAlleys.size()));
-                wanderer.distance++;
+                wanderer.distance = 1;
             } else {
                 int step = rand.nextInt(2);
                 if (step == 0) {
@@ -362,12 +362,23 @@ public class Park extends Times {
                     wanderer.distance++;
                 }
                 if (wanderer.distance == 0) {
-                    wanderer.alley = null;
-                } else if ( wanderer.distance == wanderer.alley.getLength()) {
-                    if (wanderer.alley.getA().getId() != wanderer.intersection) {
+                    if (wanderer.alley.getA().getId() == wanderer.intersection) {
                         wanderer.intersection = wanderer.alley.getA().getId();
+                        wanderer.distance = 0;
                     } else {
                         wanderer.intersection = wanderer.alley.getB().getId();
+                        wanderer.distance = 0;
+                    }
+                    wanderer.alley = null;
+                } else if (wanderer.alley != null) {
+                    if (wanderer.distance >= wanderer.alley.length) {
+                        if (wanderer.alley.getA().getId() != wanderer.intersection) {
+                            wanderer.intersection = wanderer.alley.getA().getId();
+                        } else {
+                            wanderer.intersection = wanderer.alley.getB().getId();
+                        }
+                        wanderer.distance = 0;
+                        wanderer.alley = null;
                     }
                 }
             }
@@ -384,7 +395,7 @@ public class Park extends Times {
     public void saveToTxt() {
         try (FileWriter writer = new FileWriter("park.txt")) {
             for (Alley alley : alleys) {
-                writer.write(alley.getA().getId() + " " + alley.getB().getId() + " " + alley.getLength() + "\n");
+                writer.write(alley.getA().getId() + " " + alley.getB().getId() + " " + alley.length + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
