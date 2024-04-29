@@ -3,18 +3,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.Function;
 
-/*
-    TODO:
-        1. Gauss seidel
-        2. zmiana tablicy 2D na map<map<>, double>
-            a. zmienione w lengths zmienone w prawdopodobienstwie
-            b. gauss no choice gauss choice
-*/
 public class Park extends Times {
     private Map<Integer, Intersection> intersections = new HashMap<>();
     private List<Alley> alleys = new ArrayList<>();
-    
+
     private int n;
+    private int lenOfAllAlleys = 0;
     private ArrayList<Integer> osk;
     private ArrayList<Integer> exits;
     public void valPark(int n, ArrayList<Integer> osk, ArrayList<Integer> exits){
@@ -34,6 +28,7 @@ public class Park extends Times {
         Intersection a = intersections.getOrDefault(aId, new Intersection(aId));
         Intersection b = intersections.getOrDefault(bId, new Intersection(bId));
         Alley alley = new Alley(a, b, length);
+        lenOfAllAlleys += length;
         addIntersection(a);
         addIntersection(b);
         addAlley(alley);
@@ -43,19 +38,15 @@ public class Park extends Times {
         Map<Map<Integer, Integer>, Double> lengthsMap = new HashMap<>();
 
         for (Alley alley : alleys) {
-            if (lengthsMap.containsKey(createPair(alley.getA().getId(), alley.getB().getId()))) {
-                lengthsMap.put(createPair(alley.getA().getId(), alley.getB().getId()), (double) alley.getLength());
-            } else {
-                if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
-                    Map<Integer, Integer> idMap = new HashMap<>();
-                    idMap.put(alley.getA().getId(), alley.getB().getId());
-                    lengthsMap.put(idMap, (double) alley.getLength());
-                }
-                if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
-                    Map<Integer, Integer> idMap = new HashMap<>();
-                    idMap.put(alley.getB().getId(), alley.getA().getId());
-                    lengthsMap.put(idMap, (double) alley.getLength());
-                }
+            if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
+                Map<Integer, Integer> idMap = new HashMap<>();
+                idMap.put(alley.getA().getId(), alley.getB().getId());
+                lengthsMap.put(idMap, (double) alley.getLength());
+            }
+            if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
+                Map<Integer, Integer> idMap = new HashMap<>();
+                idMap.put(alley.getB().getId(), alley.getA().getId());
+                lengthsMap.put(idMap, (double) alley.getLength());
             }
         }
         System.out.println(lengthsMap);
@@ -88,9 +79,7 @@ public class Park extends Times {
             int toVertex = idMap.values().iterator().next();
 
             double probability;
-            if (fromVertex == toVertex) {
-                probability = 1.0;
-            } else if (length != 0) {
+            if (length != 0) {
                 probability = (1.0 / length) / inverseSums[fromVertex];
             } else {
                 probability = 0.0;
@@ -99,33 +88,55 @@ public class Park extends Times {
             probabilities.put(idMap, probability);
         }
 
+        System.out.println(probabilities);
+        System.out.println(probabilities);
+        return probabilities;
+    }
+
+    public Map<Map<Integer, Integer>, Double> transposeMatrix(Map<Map<Integer, Integer>, Double> matrix) {
+        Map<Map<Integer, Integer>, Double> transposedMatrix = new HashMap<>();
+        for (Map.Entry<Map<Integer, Integer>, Double> entry : matrix.entrySet()) {
+            Map<Integer, Integer> coordinates = entry.getKey();
+            Double value = entry.getValue();
+
+            // Swap the coordinates
+            Map<Integer, Integer> transposedCoordinates = new HashMap<>();
+            for (Map.Entry<Integer, Integer> coord : coordinates.entrySet()) {
+                transposedCoordinates.put(coord.getValue(), coord.getKey());
+            }
+
+            transposedMatrix.put(transposedCoordinates, value);
+        }
+        System.out.println(transposedMatrix);
+
         for (int i = 1; i <= n; i++) {
-            Map<Integer, Integer> id = new HashMap<>();
-            id.put(i, i);
-            probabilities.put(id, 1.0);
+            if (transposedMatrix.containsKey(createPair(i, i))) {
+                double value = transposedMatrix.get(createPair(i, i));
+                transposedMatrix.put(createPair(i, i), value - 1.0);
+                if (transposedMatrix.get(createPair(i, i)) == 0.0) {
+                    transposedMatrix.put(createPair(i, i), 1.0);
+                }
+            } else {
+                transposedMatrix.put(createPair(i, i), 1.0);
+            }
+            //transposedMatrix.put(createPair(i, i), 1.0);
         }
 
         for (int i = 1; i <= n; i++) {
-            if (exits.contains(i)) {
-                Map<Integer, Integer> idMap = new HashMap<>();
-                idMap.put(i, n+1);
-                probabilities.put(idMap, 1.0);
+            if (osk.contains(i) || exits.contains(i)) {
+                Map<Integer, Integer> id = new HashMap<>();
+                id.put(i, i);
+                transposedMatrix.put(id, 1.0);
             }
         }
 
-        //DEBUG probabilities
-        /*for (Map.Entry<Map<Integer, Integer>, Double> entry : probabilities.entrySet()) {
-            Map<Integer, Integer> idMap = entry.getKey();
-            Double value = entry.getValue();
-
-            System.out.print("Keys: ");
-            idMap.forEach((k, v) -> System.out.print("(" + k + ", " + v + ") "));
-            System.out.println("val: " + value);
-        }*/
-
-        return probabilities;
+        System.out.println(transposedMatrix);
+        return transposedMatrix;
     }
-    
+
+
+
+
     //---------------------------------------Gauss with choice------------------------------------
 
     private double[] solveGausWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
@@ -180,7 +191,7 @@ public class Park extends Times {
             Double value1 = matrix.getOrDefault(createPair(i, n + 1), 0.0);
             Double value2 = matrix.get(createPair(i, i));
 
-            if (value2 != 0.0) {
+            if (0.0 != value2) {
                 x[i] = (value1 - sum) / value2;
             }
         }
@@ -188,9 +199,8 @@ public class Park extends Times {
         return x;
     }
 
-    public void printGaussWithChoice() {
-        double[] wmatrix = solveGausWithChoice(createProbabilityMatrix());
-        int n = wmatrix.length - 1;
+    public void printGaussWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
+        double[] wmatrix = solveGausWithChoice(matrix);
         for (int i = 1; i <= n; i++) {
             System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
         }
@@ -244,8 +254,8 @@ public class Park extends Times {
         return x;
     }
 
-    public void printGaussSiedel() {
-        double[] wmatrix = solveGaussSeidel(createProbabilityMatrix());
+    public void printGaussSiedel(Map<Map<Integer, Integer>, Double> matrix) {
+        double[] wmatrix = solveGaussSeidel(matrix);
         int n = wmatrix.length - 2;
         for (int i = 1; i <= n; i++) {
             System.out.println("x" + (i) + " : " + Math.abs(wmatrix[i]));
@@ -261,15 +271,11 @@ public class Park extends Times {
     //---------------------------------GAUSS NORMAL-----------------------------------------------
 
     public double[] solveGaus(Map<Map<Integer, Integer>, Double> matrix) {
-        if (matrix == null) {
-            throw new IllegalArgumentException("Matrix cannot be null.");
-        }
-
         for (int i = 1; i <= n; i++) {
             Map<Integer, Integer> key = createPair(i, i);
-            if (!matrix.containsKey(key) || matrix.get(key) <= 1e-10) {
+            if (!matrix.containsKey(key) || Math.abs(matrix.get(key)) <= 1e-10) {
                 matrix.put(key, 1e-10);
-                System.out.println("Blad");
+                System.out.println("Blad" + key);
             }
             for (int j = i + 1; j <= n; j++) {
                 double divisor = matrix.get(key);
@@ -319,8 +325,8 @@ public class Park extends Times {
         return pair;
     }
 
-    public void printGauss() {
-        double[] solution = solveGaus(createProbabilityMatrix());
+    public void printGauss(Map<Map<Integer, Integer>, Double> matrix) {
+        double[] solution = solveGaus(matrix);
         int n = solution.length - 1;
         for (int i = 1; i <= n; i++) {
             System.out.println("x" + i + " : " + Math.abs(solution[i]));
@@ -331,6 +337,7 @@ public class Park extends Times {
         }
         writeTimesToCSVResullts(wm, "gaus.csv");
     }
+
 
     //--------------------------------------------------------------------------------------------
 
@@ -358,7 +365,7 @@ public class Park extends Times {
                     }
                 }
                 wanderer.alley = possibleAlleys.get(rand.nextInt(possibleAlleys.size()));
-                wanderer.distance++;
+                wanderer.distance = 1;
             } else {
                 int step = rand.nextInt(2);
                 if (step == 0) {
@@ -367,12 +374,23 @@ public class Park extends Times {
                     wanderer.distance++;
                 }
                 if (wanderer.distance == 0) {
-                    wanderer.alley = null;
-                } else if ( wanderer.distance == wanderer.alley.getLength()) {
-                    if (wanderer.alley.getA().getId() != wanderer.intersection) {
+                    if (wanderer.alley.getA().getId() == wanderer.intersection) {
                         wanderer.intersection = wanderer.alley.getA().getId();
+                        wanderer.distance = 0;
                     } else {
                         wanderer.intersection = wanderer.alley.getB().getId();
+                        wanderer.distance = 0;
+                    }
+                    wanderer.alley = null;
+                } else if (wanderer.alley != null) {
+                    if (wanderer.distance >= wanderer.alley.getLength()) {
+                        if (wanderer.alley.getA().getId() != wanderer.intersection) {
+                            wanderer.intersection = wanderer.alley.getA().getId();
+                        } else {
+                            wanderer.intersection = wanderer.alley.getB().getId();
+                        }
+                        wanderer.distance = 0;
+                        wanderer.alley = null;
                     }
                 }
             }
@@ -396,13 +414,12 @@ public class Park extends Times {
         }
     }
 
-    public void getExecTime(){
-        Map<Map<Integer, Integer>, Double> matrix = createProbabilityMatrix();
+    public void getExecTime(Map<Map<Integer, Integer>, Double> matrix){
         countExecTime(matrix);
     }
 
     private void countExecTime(Map<Map<Integer, Integer>, Double> matrix){
-        
+
         double executionTime;
 
         List<Double> list = new ArrayList<>();
@@ -431,5 +448,134 @@ public class Park extends Times {
         System.out.println("gauss seidel exec time: "+ executionTime);
         Times.writeTimesToCSV(list);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private Map<Map<Integer, Integer>, Double> createLengthsMatrixForMarkov( ArrayList<Integer> osk, ArrayList<Integer> exits){
+        Map<Map<Integer, Integer>, Double> lengthsMap = new HashMap<>();
+
+        for (Alley alley : alleys) {
+            if (!osk.contains(alley.getA().getId()) && !exits.contains(alley.getA().getId())) {
+                Map<Integer, Integer> idMap = new HashMap<>();
+                idMap.put(alley.getA().getId(), alley.getB().getId());
+                lengthsMap.put(idMap, (double) alley.getLength());
+            }
+            if (!osk.contains(alley.getB().getId()) && !exits.contains(alley.getB().getId())) {
+                Map<Integer, Integer> idMap = new HashMap<>();
+                idMap.put(alley.getB().getId(), alley.getA().getId());
+                lengthsMap.put(idMap, (double) alley.getLength());
+            }
+        }
+        System.out.println(lengthsMap);
+        return lengthsMap;
+    }
+
+    public Map<Map<Integer, Integer>, Double> createProbabilityMatrixForMarkov() {
+
+        Map<Map<Integer, Integer>, Double> lengths = createLengthsMatrixForMarkov(osk, exits);
+        Map<Map<Integer, Integer>, Double> probabilities = new HashMap<>();
+
+        double[] inverseSums = new double[n + 1];
+        for (Map.Entry<Map<Integer, Integer>, Double> entry : lengths.entrySet()) {
+            Map<Integer, Integer> idMap = entry.getKey();
+            double length = entry.getValue();
+
+            int fromVertex = idMap.keySet().iterator().next();
+            int toVertex = idMap.values().iterator().next();
+
+            if (fromVertex != toVertex && length != 0) {
+                inverseSums[fromVertex] += 1.0 / length;
+            }
+        }
+
+        for (Map.Entry<Map<Integer, Integer>, Double> entry : lengths.entrySet()) {
+            Map<Integer, Integer> idMap = entry.getKey();
+            double length = entry.getValue();
+
+            int fromVertex = idMap.keySet().iterator().next();
+            int toVertex = idMap.values().iterator().next();
+
+            double probability;
+            if (length != 0) {
+                probability = (1.0 / length) / inverseSums[fromVertex];
+            } else {
+                probability = 0.0;
+            }
+
+            probabilities.put(idMap, probability);
+        }
+
+        for (int i = 1; i <= n; i++) {
+            if (osk.contains(i) || exits.contains(i)) {
+                Map<Integer, Integer> id = new HashMap<>();
+                id.put(i, i);
+                probabilities.put(id, 1.0);
+            }
+        }
+
+        System.out.println(probabilities);
+        return probabilities;
+    }
+
+    //Markov chain solver
+    public void markovChainSolver(int start) {
+        Map<Map<Integer, Integer>, Double> matrix = createProbabilityMatrixForMarkov();
+
+        double[] steadyStateVector = calculateSteadyState(matrix, start);
+
+        // Print the steady-state vector
+        System.out.println("Steady-State Vector:");
+        for (int i = 1; i <= n ; i++) {
+            System.out.println("State " + i + ": " + steadyStateVector[i]);
+        }
+    }
+
+    private double[] calculateSteadyState(Map<Map<Integer, Integer>, Double> matrix, int start) {
+        double[] pi = new double[n  + 1]; // Initial guess for the steady-state vector
+        pi[start] = 1.0; // Start with all probability in the specified start state
+
+        // Power iteration method
+        double epsilon = 1e-14; // Tolerance for convergence
+        double error = Double.MAX_VALUE;
+        while (error > epsilon) {
+            double[] newPi = new double[n+1];
+            for (int i = 1; i <= n ; i++) {
+                double sum = 0.0;
+                for (int j = 1; j <= n ; j++) {
+                    sum += pi[j] * matrix.getOrDefault(createPair(j, i), 0.0);
+                }
+                newPi[i] = sum;
+            }
+            error = calculateError(pi, newPi);
+            pi = newPi;
+        }
+
+        return pi;
+    }
+
+    // Helper method to calculate the error between two vectors
+    private double calculateError(double[] v1, double[] v2) {
+        double maxDiff = 0.0;
+        for (int i = 0; i < v1.length; i++) {
+            double diff = Math.abs(v1[i] - v2[i]);
+            if (diff > maxDiff) {
+                maxDiff = diff;
+            }
+        }
+        return maxDiff;
+    }
 }
+
+
 

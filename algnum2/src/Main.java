@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -38,16 +39,23 @@ public class Main {
 
         sc.close();
 
-        System.out.println("Gaaus");
-        park.printGauss();
-        System.out.println("Gaus seidel");
-        park.printGaussSiedel();
-        System.out.println("gaus choice");
-        park.printGaussWithChoice();
+        Map<Map<Integer, Integer>, Double> matrix = park.createProbabilityMatrix();
+        Map<Map<Integer, Integer>, Double> matrix2 = park.transposeMatrix(matrix);
+        //System.out.println("Gaaus");
+        park.printGauss(matrix2);
+        //System.out.println("Gaus seidel");
+        park.printGaussSiedel(matrix2);
+        //System.out.println("gaus choice");
+        park.printGaussWithChoice(matrix2);
 
-        //park.getExecTime();
+        System.out.println("markov chain solver");
+        park.markovChainSolver(wanderer);
 
-        //System.out.println("Monte carlo:"+park.monte(10000, wanderer));
+        //park.getExecTime(matrix);
+
+        System.out.println("Monte carlo:" + park.monte(10000, wanderer));
+        System.out.println("exits" + exits);
+        System.out.println("Osk" + osk);
     }
 }
 /*
