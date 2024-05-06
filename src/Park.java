@@ -8,8 +8,7 @@ public class Park extends Times {
     private List<Alley> alleys = new ArrayList<>();
 
     private int n;
-    private int m;
-
+    private  int m;
     private int lenOfAllAlleys = 0;
     private ArrayList<Integer> osk;
     private ArrayList<Integer> exits;
@@ -61,18 +60,22 @@ public class Park extends Times {
          ZOSTAŁO:
             Storzyc macierz
      */
+
     public Map<Map<Integer, Integer>, Double> matrixForGauss(ArrayList<Integer> osk, ArrayList<Integer> exits) {
         Map<Map<Integer, Integer>, Double> matrix = new HashMap<>();
         fillNumberOfPaths();
+
+        System.out.println(lenOfAllAlleys);
+
         int counter = n + 1;
         for (Alley alley : alleys) {
             int aID = alley.getA().getId();
             int bID = alley.getB().getId();
 
             //Wartosci pierwszego skrzyzowania
-            int length = alley.getLength();
+            int length = alley.getLength() - 1;
             if (!osk.contains(aID) && !exits.contains(aID)) {
-                matrix.put(createPair(aID, counter), (double) 1 / countNumberOfPaths(aID));
+                matrix.put(createPair(aID, counter), -(double) 1 / countNumberOfPaths(aID));
             }
 
             for (int i = counter; i < counter + length; i++) {
@@ -81,32 +84,36 @@ public class Park extends Times {
 
                 //Lewy przypadek
                 if (i == counter) {
-                    matrix.put(createPair(i, aID), (double) 1 / 2);
+                    matrix.put(createPair(i, aID), -(double) 1 / 2);
                 } else if (i == counter + length - 1) {
-                    matrix.put(createPair(i, bID), (double) 1 / 2);
+                    matrix.put(createPair(i, bID), -(double) 1 / 2);
                 } else {
-                    matrix.put(createPair(i, i - 1), (double) 1 / 2);
+                    matrix.put(createPair(i, i - 1), -(double) 1 / 2);
                 }
 
                 //Prawy przypadek
-                if (i == counter + length - 1) {
-                    matrix.put(createPair(i, i - 1), (double) 1 / 2);
-                } else {
-                    matrix.put(createPair(i, i + 1), (double) 1 / 2);
+                if (length == 1) {
+                    matrix.put(createPair(i, bID), -(double) 1 / 2);
                 }
-
+                else {
+                    if (i == counter + length - 1) {
+                        matrix.put(createPair(i, i - 1), -(double) 1 / 2);
+                    } else {
+                        matrix.put(createPair(i, i + 1), -(double) 1 / 2);
+                    }
+                }
             }
 
             counter += length;
             if (!osk.contains(bID) && !exits.contains(bID)) {
-                matrix.put(createPair(bID, counter - 1), (double) 1 / countNumberOfPaths(bID));
+                matrix.put(createPair(bID, counter - 1), -(double) 1 / countNumberOfPaths(bID));
             }
         }
 
         for (int i = 1; i <= n; i++) {
             matrix.put(createPair(i, i), (double) 1);
             if (exits.contains(i)) {
-                matrix.put(createPair(i, n + lenOfAllAlleys + 1), (double) 1);
+                matrix.put(createPair(i, n + lenOfAllAlleys - m + 1), (double) 1);
             }
         }
 
@@ -121,13 +128,13 @@ public class Park extends Times {
     //---------------------------------------Gauss with choice------------------------------------
 
     private double[] solveGausWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
-        double[] x = new double[n + lenOfAllAlleys + 1];
+        double[] x = new double[n + lenOfAllAlleys - m + 1];
 
         // Gaussian elimination with partial pivoting
-        for (int i = 1; i <= n + lenOfAllAlleys; i++) {
+        for (int i = 1; i <= n + lenOfAllAlleys - m; i++) {
             // Find the row with the maximum absolute value in the current column
             int maxRow = i;
-            for (int j = i + 1; j <= n + lenOfAllAlleys; j++) {
+            for (int j = i + 1; j <= n + lenOfAllAlleys - m; j++) {
                 if (matrix.get(createPair(j, i)) != null &&
                         (matrix.get(createPair(maxRow, i)) == null ||
                                 Math.abs(matrix.get(createPair(j, i))) > Math.abs(matrix.get(createPair(maxRow, i))))) {
@@ -137,7 +144,7 @@ public class Park extends Times {
 
             // Swap rows if necessary
             if (maxRow != i) {
-                for (int k = i; k <= n + lenOfAllAlleys + 1; k++) {
+                for (int k = i; k <= n + lenOfAllAlleys - m + 1; k++) {
                     double temp = matrix.getOrDefault(createPair(i, k), 0.0);
                     matrix.put(createPair(i, k), matrix.getOrDefault(createPair(maxRow, k), 0.0));
                     matrix.put(createPair(maxRow, k), temp);
@@ -145,14 +152,14 @@ public class Park extends Times {
             }
 
             // Eliminate entries below the pivot
-            for (int j = i + 1; j <= n + lenOfAllAlleys; j++) {
+            for (int j = i + 1; j <= n + lenOfAllAlleys - m; j++) {
                 double factor = 0.0;
                 Double valueJ = matrix.get(createPair(j, i));
                 Double valueI = matrix.get(createPair(i, i));
 
                 if (valueJ != null && valueI != null && valueI != 0.0) {
                     factor = valueJ / valueI;
-                    for (int k = i; k <= n + lenOfAllAlleys + 1; k++) {
+                    for (int k = i; k <= n + lenOfAllAlleys - m + 1; k++) {
                         double val = matrix.getOrDefault(createPair(j, k), 0.0) - factor * matrix.getOrDefault(createPair(i, k), 0.0);
                         matrix.put(createPair(j, k), val);
                     }
@@ -160,16 +167,16 @@ public class Park extends Times {
             }
         }
 
-        for (int i = n + lenOfAllAlleys; i >= 1; i--) {
+        for (int i = n + lenOfAllAlleys - m; i >= 1; i--) {
             double sum = 0.0;
-            for (int j = i + 1; j <= n + lenOfAllAlleys; j++) {
+            for (int j = i + 1; j <= n + lenOfAllAlleys - m; j++) {
                 Double valueIJ = matrix.get(createPair(i, j));
                 if (valueIJ != null) {
                     sum += valueIJ * x[j];
                 }
             }
 
-            Double value1 = matrix.getOrDefault(createPair(i, n + lenOfAllAlleys + 1), 0.0);
+            Double value1 = matrix.getOrDefault(createPair(i, n + lenOfAllAlleys - m + 1), 0.0);
             Double value2 = matrix.get(createPair(i, i));
 
             if (0.0 != value2) {
@@ -179,6 +186,7 @@ public class Park extends Times {
 
         return x;
     }
+
 
     public void printGaussWithChoice(Map<Map<Integer, Integer>, Double> matrix) {
         double[] wmatrix = solveGausWithChoice(matrix);
@@ -197,27 +205,22 @@ public class Park extends Times {
     //------------------------------------Gauss Seidel--------------------------------------------
 
     private double[] solveGaussSeidel(Map<Map<Integer, Integer>, Double> matrix) {
-        double[] x = new double[n + lenOfAllAlleys + 2];
-        double[] xNew = new double[n  + lenOfAllAlleys+ 2];
-        double epsilon = 1e-10;
-        int maxIterations = 1000;
+        int size = n + lenOfAllAlleys - m + 2;
+        double[] x = new double[size];
+        double[] xNew = new double[size];
+        double epsilon = 1e-5;
+        int maxIterations = 200;
 
         for (int iter = 0; iter < maxIterations; iter++) {
             double error = 0.0;
 
-            for (int i = 1; i <= n + lenOfAllAlleys; i++) {
-                double sum = 0.0;
+            for (int i = 1; i <= size - 2; i++) {
+                double sum = calculateSum(matrix, i, xNew, iter);
                 double diagonalValue = matrix.getOrDefault(createPair(i, i), 0.0);
 
-                for (int j = 1; j <= n + lenOfAllAlleys; j++) {
-                    if (j != i) {
-                        sum += matrix.getOrDefault(createPair(i, j), 0.0) * ((iter == 0) ? 0.0 : xNew[j]);
-                    }
-                }
-
                 if (diagonalValue != 0.0) {
-                    sum += matrix.getOrDefault(createPair(i, n + lenOfAllAlleys + 1), 0.0) * ((iter == 0) ? 0.0 : xNew[n + lenOfAllAlleys+1]);
-                    xNew[i] = (matrix.getOrDefault(createPair(i, n + lenOfAllAlleys + 1), 0.0) - sum) / diagonalValue;
+                    sum += matrix.getOrDefault(createPair(i, size - 1), 0.0) * ((iter == 0) ? 0.0 : xNew[size - 1]);
+                    xNew[i] = calculateXNew(matrix, i, sum, diagonalValue, xNew, iter);
                 } else {
                     xNew[i] = 0.0;
                 }
@@ -229,10 +232,25 @@ public class Park extends Times {
                 break;
             }
 
-            System.arraycopy(xNew, 1, x, 1, n + lenOfAllAlleys); // Update x for the next iteration
+            System.arraycopy(xNew, 1, x, 1, size - 2);
         }
 
         return x;
+    }
+
+    private double calculateSum(Map<Map<Integer, Integer>, Double> matrix, int i, double[] xNew, int iter) {
+        double sum = 0.0;
+        for (int j = 1; j <= n + lenOfAllAlleys - m + 2 - 2; j++) {
+            if (j != i) {
+                sum += matrix.getOrDefault(createPair(i, j), 0.0) * ((iter == 0) ? 0.0 : xNew[j]);
+            }
+        }
+        return sum;
+    }
+
+    private double calculateXNew(Map<Map<Integer, Integer>, Double> matrix, int i, double sum, double diagonalValue, double[] xNew, int iter) {
+        sum += matrix.getOrDefault(createPair(i, n + lenOfAllAlleys - m + 2 - 1), 0.0) * ((iter == 0) ? 0.0 : xNew[n + lenOfAllAlleys - m + 2 - 1]);
+        return (matrix.getOrDefault(createPair(i, n + lenOfAllAlleys - m + 2 - 1), 0.0) - sum) / diagonalValue;
     }
 
     public void printGaussSiedel(Map<Map<Integer, Integer>, Double> matrix) {
@@ -251,13 +269,13 @@ public class Park extends Times {
     //---------------------------------GAUSS NORMAL-----------------------------------------------
 
     public double[] solveGaus(Map<Map<Integer, Integer>, Double> matrix) {
-        for (int i = 1; i <= n + lenOfAllAlleys; i++) {
+        for (int i = 1; i <= n + lenOfAllAlleys - m; i++) {
             Map<Integer, Integer> key = createPair(i, i);
-            if (!matrix.containsKey(key) || Math.abs(matrix.get(key)) <= 1e-10) {
-                matrix.put(key, 1e-10);
+            if (!matrix.containsKey(key) || Math.abs(matrix.get(key)) <= 1e-5) {
+                matrix.put(key, 1e-5);
                 System.out.println("Blad" + key);
             }
-            for (int j = i + 1; j <= n + lenOfAllAlleys; j++) {
+            for (int j = i + 1; j <= n + lenOfAllAlleys - m; j++) {
                 double divisor = matrix.get(key);
                 if (divisor == 0.0) {
                     throw new IllegalArgumentException("Divide by zero error");
@@ -267,7 +285,7 @@ public class Park extends Times {
                     continue;
                 }
                 double factor = matrix.get(keyJ) / divisor;
-                for (int k = i; k <= n + lenOfAllAlleys + 1; k++) {
+                for (int k = i; k <= n + lenOfAllAlleys + 1 - m; k++) {
                     Map<Integer, Integer> keyJK = createPair(j, k);
                     Map<Integer, Integer> keyIK = createPair(i, k);
                     double val = matrix.getOrDefault(keyJK, 0.0) - factor * matrix.getOrDefault(keyIK, 0.0);
@@ -275,10 +293,10 @@ public class Park extends Times {
                 }
             }
         }
-        double[] x = new double[n + lenOfAllAlleys + 1];
-        for (int i = n + lenOfAllAlleys; i >= 1; i--) {
+        double[] x = new double[n + lenOfAllAlleys + 1 - m];
+        for (int i = n + lenOfAllAlleys - m; i >= 1; i--) {
             double sum = 0.0;
-            for (int j = i + 1; j <= n + lenOfAllAlleys; j++) {
+            for (int j = i + 1; j <= n + lenOfAllAlleys - m; j++) {
                 Map<Integer, Integer> keyIJ = createPair(i, j);
                 if (!matrix.containsKey(keyIJ)) {
                     continue;
@@ -293,11 +311,12 @@ public class Park extends Times {
             if (diagonalValue == 0.0) {
                 throw new IllegalArgumentException("Divide by zero error");
             }
-            Map<Integer, Integer> keyIN = createPair(i, n + lenOfAllAlleys + 1);
+            Map<Integer, Integer> keyIN = createPair(i, n + lenOfAllAlleys + 1 - m);
             x[i] = (matrix.getOrDefault(keyIN, 0.0) - sum) / diagonalValue;
         }
         return x;
     }
+
 
     private static Map<Integer, Integer> createPair(int i, int j) {
         Map<Integer, Integer> pair = new HashMap<>();
@@ -409,13 +428,16 @@ public class Park extends Times {
         executionTime = countTime(solveGausFunction);
         System.out.println("gauss without choice exec time: "+ executionTime);
         list.add(executionTime);
+
         Function<Void,Void> solveGaussWithChoiceFunction = (Void) ->{
             solveGausWithChoice(matrix);
             return null;
         };
+
         executionTime = countTime(solveGaussWithChoiceFunction);
         System.out.println("gauss with choice exec time: "+ executionTime);
         list.add(executionTime);
+
 
         Function<Void,Void> solveGausSiedelFunction = (Void) ->{
             solveGaussSeidel(matrix);
@@ -525,7 +547,7 @@ public class Park extends Times {
         pi[start] = 1.0; // Start with all probability in the specified start state
 
         // Power iteration method
-        double epsilon = 1e-14; // Tolerance for convergence
+        double epsilon = 1e-5; // Tolerance for convergence
         double error = Double.MAX_VALUE;
         while (error > epsilon) {
             double[] newPi = new double[n+1];
