@@ -1,12 +1,12 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Park park = new Park();
         File starting = new File(System.getProperty("user.dir"));
+        System.out.println(starting.toString());
         File file = new File(starting,"test_case.txt");
         Scanner sc = new Scanner(file);
 
@@ -34,19 +34,23 @@ public class Main {
 
         int wanderer = sc.nextInt();
         park.saveToTxt();
-        park.valPark(n, osk, exits);
+        park.valPark(n, osk, exits, m);
 
         sc.close();
 
+        Map<Map<Integer, Integer>, Double> matrix = park.matrixForGauss(osk, exits);
         System.out.println("Gaaus");
-        park.printGauss();
+        park.printGauss(matrix);
         System.out.println("Gaus seidel");
-        park.printGaussSiedel();
+        park.printGaussSiedel(matrix);
         System.out.println("gaus choice");
-        park.printGaussWithChoice();
+        park.printGaussWithChoice(matrix);
 
-        park.getExecTime();
+        
 
-        //System.out.println("Monte carlo:"+park.monte(10000, wanderer));
+        park.getExecTime(matrix);
+
+        System.out.println("Monte carlo:" + park.monte(10000, wanderer));
+        
     }
 }

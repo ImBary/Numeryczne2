@@ -1,154 +1,111 @@
 \documentclass{article}
-\usepackage{graphicx}
-\title{Sprawozdanie}
-\author{Michal Safuryn, Bartosz Smolibowski, Wojciech Balcer}
-\date{\today}
+\usepackage{graphicx} 
+\usepackage{amsmath}
+
+\title{Projekt 2}
+\author{Wojtek Balcer, Michał Safuryn, Bartek Smolibowski}
+\date{April 2024}
+
 \begin{document}
+
 \maketitle
-\section{Parki}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{1.jpg}
-\caption{Park numer 1}
+\section{Opis}
+
+\noindent
+\textbf{Zależności Projektu} \\
+\begin{tabular}{>{\bfseries}rl}
+Rozszerzenia: & $R_0$ and $R_1$ \\
+Użyte języki: & Java, Python, Bash \\
+Użyta struktura: & $DS_1$ \\
+Sposób przechowywania macierzy: & Mapa map i intów dla niezerowych wartości \\
+\end{tabular}
+
+\clearpage
+
+\section{Monte Carlo}
+
+\hspace{}
+
+\textbf{Wykresy różnicy pomiedzy testami}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1\linewidth]{comparison_plots.png}
+    \label{fig:my_label}
 \end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{2.jpg}
-\caption{Park numer 2}
+
+
+
+\clearpage
+
+\section{Hipoteza  $H_1$}
+\textbf{$H_1$:} Algorytm  $A_2$ zwykle daje dokładniejsze wyniki niż $A_1$. Różnica dokładności rośnie wraz z rozmiarem macierzy i liczbą niezerowych współczynników.
+
+\hspace{}
+
+\textbf{Wykresy różnicy $A_1$ - $A_2$}
+
+\text{Wyniki są identyczne oprocz testu gdzie różnica jest na dopusczalnym poziomie}
+\textbf{Hipoteza nieprawdziwa.} 
+\clearpage
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1\linewidth]{h1_plot_7.jpg}
+    \label{fig:my_label}
 \end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{3.jpg}
-\caption{Park numer 3}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1\linewidth]{h1_plot_8.jpg}
+    \label{fig:my_label}
 \end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{4.jpg}
-\caption{Park numer 4}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1\linewidth]{h1_plot_9.jpg}
+    \label{fig:my_label}
 \end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{5.jpg}
-\caption{Park numer 5}
+
+
+
+
+\clearpage
+
+\section{Hipoteza $H_2$}
+
+\textbf{Algorytm $A_3$ działa dla postawionego zadania.}
+
+\hspace{}
+
+\textbf{Wykresy różnicy $Monte$ - $A_3$}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1\linewidth]{a3.png}
+    \label{fig:my_label}
 \end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{6.jpg}
-\caption{Park numer 6}
+
+
+
+
+\textbf{Hipoteza prawdziwa. Róznica pomiędzy wynikami jest  dopuszczalna oscylująca na tysięcznych procenta.} 
+
+
+\clearpage
+
+\section{Hipoteza $h_3$}
+
+\textbf{$H_3$: Jeśli algorytm $A_3$ jest zbieżny do rozwiązania, to wyniki otrzymujemy istotnie szybciej niż dla $A_1$ i $A_2$}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1\linewidth]{czasy.jpg}
+    \label{fig:enter-label}
 \end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{7.jpg}
-\caption{Park numer 7}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{8.jpg}
-\caption{Park numer 8}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{9.jpg}
-\caption{Park numer 9}
-\end{figure}
-Projekt zawiera rozszerzenia R0 i R1. Czyli moze sie znalezc pare wyjsc oraz pare osk. Pisany w javie, pythonie i bashu. Korzystamy ze struktury danych DS1. Wszystkie macierze sa zapamietywane jako mapa map i intow z wartosciami nierowynymi 0. 
-\section{Hipoteza 1}
-H1: Algorytm A2 zwykle daje dokladniejsze wyniki niz A1. Roznica dokladnosci rosnie wraz z rozmiarem macierzy i liczba niezerowych wspolczynnikow.
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{1.jpg}
-\caption{Park numer 1}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{2.jpg}
-\caption{Park numer 2}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{3.jpg}
-\caption{Park numer 3}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{4.jpg}
-\caption{Park numer 4}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{5.jpg}
-\caption{Park numer 5}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{6.jpg}
-\caption{Park numer 6}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{7.jpg}
-\caption{Park numer 7}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{8.jpg}
-\caption{Park numer 8}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{9.jpg}
-\caption{Park numer 9}
-\end{figure}
-Hipoteza nieprawdziwa. Dla kazdego przykladu wyniki otrzymywane byly takie same.
-\section{Hipoteza 2}
-H2: Algorytm A3 dziala dla postawionego zadania
-???
-\section{Hipoteza 3}
-H3: Jesli algorytm A3 jest zbiezny do rozwiazania, to wyniki otrzymujemy istotnie szybciej niz dla A1 i A2
-Hipoteza (nie)prawdziwa
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{1.jpg}
-\caption{Park numer 1}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{2.jpg}
-\caption{Park numer 2}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{3.jpg}
-\caption{Park numer 3}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{4.jpg}
-\caption{Park numer 4}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{5.jpg}
-\caption{Park numer 5}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{6.jpg}
-\caption{Park numer 6}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{7.jpg}
-\caption{Park numer 7}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{8.jpg}
-\caption{Park numer 8}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.75\textwidth]{9.jpg}
-\caption{Park numer 9}
-\end{figure}
+
+
+
+\textbf{Hipoteza nieprawdziwa.} 
+
 \end{document}
